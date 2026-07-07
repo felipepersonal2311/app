@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Finanças da Família{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <div class="installment-tag">
+    Código de convite da família: <strong>{{ current_user.household.invite_code }}</strong>
+    (compartilhe para dar acesso a mais alguém)
+  </div>
+</div>
+
+<form class="filters" method="get">
+  <div class="field">
+    <label for="mes">Mês</label>
+    <select id="mes" name="mes">
+      {% for i in range(1, 13) %}
+        <option value="{{ i }}" {% if i == month %}selected{% endif %}>{{ month_names[i] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label for="ano">Ano</label>
+    <input type="number" id="ano" name="ano" value="{{ year }}" style="width:90px">
+  </div>
+  <div class="field">
+    <label for="quem">Quem</label>
+    <select id="quem" name="quem">
+      <option value="todos" {% if who == 'todos' %}selected{% endif %}>Todos</option>
+      <option value="eu" {% if who == 'eu' %}selected{% endif %}>Só eu</option>
+      {% for u in users if u.id != current_user.id %}
+        <option value="{{ u.id }}" {% if who == u.id|string %}selected{% endif %}>{{ u.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <button type="submit" class="btn btn-secondary">Filtrar</button>
+  </div>
+</form>
+
+<div class="grid">
+  <div class="stat">
+    <div class="label">Receitas no mês</div>
+    <div class="value green">R$ {{ "%.2f"|format(receitas) }}</div>
+  </div>
+  <div class="stat">
+    <div class="label">Despesas avulsas (conta/dinheiro)</div>
+    <div class="value red">R$ {{ "%.2f"|format(despesas_avulsas) }}</div>
+  </div>
+  <div class="stat">
+    <div class="label">Gasto no cartão (compras do mês)</div>
+    <div class="value red">R$ {{ "%.2f"|format(gastos_cartao) }}</div>
+  </div>
+  <div class="stat">
+    <div class="label">Saldo do mês (receitas - despesas)</div>
+    <div class="value {{ 'green' if (receitas - despesas_avulsas - gastos_cartao) >= 0 else 'red' }}">
+      R$ {{ "%.2f"|format(receitas - despesas_avulsas - gastos_cartao) }}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Faturas com vencimento em {{ month_names[month] }}/{{ year }}</h2>
+  {% if faturas_no_mes %}
+    <table>
+      <thead>
+        <tr><th>Cartão</th><th>Vencimento</th><th>Total</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for f in faturas_no_mes %}
+        <tr>
+          <td>{{ f.account.name }}</td>
+          <td>{{ f.due_date.strftime('%d/%m/%Y') }}</td>
+          <td>R$ {{ "%.2f"|format(f.total) }}</td>
+          <td><span class="badge badge-{{ f.status }}">{{ f.status|capitalize }}</span></td>
+          <td><a href="{{ url_for('invoices.invoice_detail', invoice_id=f.id) }}">Ver</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="empty-state">Nenhuma fatura vencendo neste mês.</p>
+  {% endif %}
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>Despesas por categoria</h2>
+    {% if por_categoria %}
+      <table>
+        <thead><tr><th>Categoria</th><th>Total</th></tr></thead>
+        <tbody>
+          {% for nome, total in por_categoria %}
+          <tr><td>{{ nome }}</td><td>R$ {{ "%.2f"|format(total) }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="empty-state">Nenhuma despesa no período.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Saldo das contas</h2>
+    {% set non_card = accounts|rejectattr('is_card')|list %}
+    {% if non_card %}
+      <table>
+        <thead><tr><th>Conta</th><th>Saldo</th></tr></thead>
+        <tbody>
+          {% for a in non_card %}
+          <tr>
+            <td>{{ a.name }}</td>
+            <td class="{{ 'amount-receita' if saldos[a.id] >= 0 else 'amount-despesa' }}">
+              R$ {{ "%.2f"|format(saldos[a.id]) }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="empty-state">Nenhuma conta cadastrada ainda. <a href="{{ url_for('accounts.new_account') }}">Criar conta</a></p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

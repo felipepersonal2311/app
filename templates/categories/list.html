@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Categorias - Finanças da Família{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Categorias</h1>
+  <a class="btn" href="{{ url_for('categories.new_category') }}">+ Nova categoria</a>
+</div>
+
+<div class="card">
+  {% if categories %}
+    <table>
+      <thead><tr><th>Nome</th><th>Tipo</th><th></th></tr></thead>
+      <tbody>
+        {% for c in categories %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td><span class="badge badge-{{ c.kind }}">{{ c.kind|capitalize }}</span></td>
+          <td class="actions-inline">
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('categories.edit_category', category_id=c.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('categories.delete_category', category_id=c.id) }}" onsubmit="return confirm('Excluir esta categoria?');">
+              <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="empty-state">Nenhuma categoria cadastrada ainda.</p>
+  {% endif %}
+</div>
+{% endblock %}

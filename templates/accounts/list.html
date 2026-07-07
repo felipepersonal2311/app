@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Contas & Cartões - Finanças da Família{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Contas &amp; Cartões</h1>
+  <a class="btn" href="{{ url_for('accounts.new_account') }}">+ Nova conta/cartão</a>
+</div>
+
+<div class="card">
+  {% if accounts %}
+    <table>
+      <thead>
+        <tr><th>Nome</th><th>Tipo</th><th>Fechamento</th><th>Vencimento</th><th>Saldo</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for a in accounts %}
+        <tr>
+          <td>{{ a.name }}</td>
+          <td>{{ kinds[a.kind] }}</td>
+          <td>{{ a.closing_day if a.is_card else '-' }}</td>
+          <td>{{ a.due_day if a.is_card else '-' }}</td>
+          <td>
+            {% if a.is_card %}
+              <a href="{{ url_for('invoices.list_invoices') }}">ver faturas</a>
+            {% else %}
+              <span class="{{ 'amount-receita' if balances[a.id] >= 0 else 'amount-despesa' }}">
+                R$ {{ "%.2f"|format(balances[a.id]) }}
+              </span>
+            {% endif %}
+          </td>
+          <td class="actions-inline">
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('accounts.edit_account', account_id=a.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('accounts.delete_account', account_id=a.id) }}" onsubmit="return confirm('Excluir esta conta?');">
+              <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="empty-state">Nenhuma conta cadastrada ainda.</p>
+  {% endif %}
+</div>
+{% endblock %}

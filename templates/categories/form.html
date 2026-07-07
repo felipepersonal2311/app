@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if category else 'Nova' }} categoria - Finanças da Família{% endblock %}
+{% block content %}
+<h1>{{ 'Editar categoria' if category else 'Nova categoria' }}</h1>
+
+<form class="form-card card" method="post">
+  <div class="form-row">
+    <label for="name">Nome</label>
+    <input type="text" id="name" name="name" value="{{ category.name if category else '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="kind">Tipo</label>
+    <select id="kind" name="kind">
+      <option value="despesa" {% if category and category.kind == 'despesa' %}selected{% endif %}>Despesa</option>
+      <option value="receita" {% if category and category.kind == 'receita' %}selected{% endif %}>Receita</option>
+    </select>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn">Salvar</button>
+    <a class="btn btn-secondary" href="{{ url_for('categories.list_categories') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

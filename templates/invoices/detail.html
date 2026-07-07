@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Fatura {{ invoice.account.name }} {{ '%02d'|format(invoice.month) }}/{{ invoice.year }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Fatura {{ invoice.account.name }} — {{ '%02d'|format(invoice.month) }}/{{ invoice.year }}</h1>
+  <span class="badge badge-{{ invoice.status }}">{{ invoice.status|capitalize }}</span>
+</div>
+
+<div class="grid">
+  <div class="stat">
+    <div class="label">Vencimento</div>
+    <div class="value">{{ invoice.due_date.strftime('%d/%m/%Y') }}</div>
+  </div>
+  <div class="stat">
+    <div class="label">Total da fatura</div>
+    <div class="value red">R$ {{ "%.2f"|format(invoice.total) }}</div>
+  </div>
+  {% if invoice.status == 'paga' %}
+  <div class="stat">
+    <div class="label">Paga em</div>
+    <div class="value green">{{ invoice.paid_at.strftime('%d/%m/%Y') }}</div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Compras desta fatura</h2>
+  {% if transactions %}
+    <table>
+      <thead><tr><th>Data</th><th>Descrição</th><th>Quem</th><th>Valor</th></tr></thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr>
+          <td>{{ t.date.strftime('%d/%m/%Y') }}</td>
+          <td>
+            {{ t.description }}
+            {% if t.installment_total and t.installment_total > 1 %}
+              <span class="installment-tag">({{ t.installment_number }}/{{ t.installment_total }})</span>
+            {% endif %}
+          </td>
+          <td>{{ t.user.name }}</td>
+          <td class="amount-despesa">R$ {{ "%.2f"|format(t.amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="empty-state">Nenhuma compra nesta fatura.</p>
+  {% endif %}
+</div>
+
+{% if invoice.status != 'paga' %}
+<div class="card">
+  <h2>Marcar como paga</h2>
+  {% if payment_accounts %}
+    <form method="post" action="{{ url_for('invoices.pay_invoice', invoice_id=invoice.id) }}" class="form-card">
+      <div class="form-row">
+        <label for="payment_account_id">Pagar com a conta</label>
+        <select id="payment_account_id" name="payment_account_id" required>
+          {% for a in payment_accounts %}
+            <option value="{{ a.id }}">{{ a.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="paid_at">Data do pagamento</label>
+        <input type="date" id="paid_at" name="paid_at" value="{{ invoice.due_date.isoformat() }}" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn">Confirmar pagamento</button>
+      </div>
+    </form>
+  {% else %}
+    <p class="empty-state">Cadastre uma conta corrente ou dinheiro para poder registrar o pagamento.</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

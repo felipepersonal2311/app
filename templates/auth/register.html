@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Criar conta - Finanças da Família{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card">
+    <h1>Criar conta</h1>
+    <form method="post">
+      <div class="radio-group">
+        <label><input type="radio" name="mode" value="new" checked onchange="toggleMode()"> Criar novo grupo familiar</label>
+        <label><input type="radio" name="mode" value="join" onchange="toggleMode()"> Já tenho um código de convite</label>
+      </div>
+
+      <div class="form-row" id="household-name-row">
+        <label for="household_name">Nome do grupo familiar (ex: Família Silva)</label>
+        <input type="text" id="household_name" name="household_name">
+      </div>
+
+      <div class="form-row" id="invite-code-row" style="display:none">
+        <label for="invite_code">Código de convite</label>
+        <input type="text" id="invite_code" name="invite_code" maxlength="6" placeholder="Ex: A1B2C3">
+      </div>
+
+      <div class="form-row">
+        <label for="name">Seu nome</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-row">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-row">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn">Criar conta</button>
+      </div>
+    </form>
+    <div class="auth-links">
+      Já tem conta? <a href="{{ url_for('auth.login') }}">Entrar</a>
+    </div>
+  </div>
+</div>
+<script>
+function toggleMode() {
+  const isJoin = document.querySelector('input[name="mode"]:checked').value === 'join';
+  document.getElementById('household-name-row').style.display = isJoin ? 'none' : 'flex';
+  document.getElementById('invite-code-row').style.display = isJoin ? 'flex' : 'none';
+}
+</script>
+{% endblock %}

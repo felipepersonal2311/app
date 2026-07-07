@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Entrar - Finanças da Família{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card">
+    <h1>Entrar</h1>
+    <form method="post">
+      <div class="form-row">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required autofocus>
+      </div>
+      <div class="form-row">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn">Entrar</button>
+      </div>
+    </form>
+    <div class="auth-links">
+      Ainda não tem conta? <a href="{{ url_for('auth.register') }}">Criar conta</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

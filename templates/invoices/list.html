@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Faturas - Finanças da Família{% endblock %}
+{% block content %}
+<h1>Faturas</h1>
+
+{% if not cards %}
+  <p class="empty-state">Você ainda não tem nenhum cartão cadastrado. <a href="{{ url_for('accounts.new_account') }}">Criar cartão</a></p>
+{% elif not invoices %}
+  <p class="empty-state">Nenhuma fatura gerada ainda. Lance uma compra no cartão para criar a primeira fatura.</p>
+{% else %}
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Cartão</th><th>Período</th><th>Vencimento</th><th>Total</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for f in invoices %}
+        <tr>
+          <td>{{ f.account.name }}</td>
+          <td>{{ '%02d'|format(f.month) }}/{{ f.year }}</td>
+          <td>{{ f.due_date.strftime('%d/%m/%Y') }}</td>
+          <td>R$ {{ "%.2f"|format(f.total) }}</td>
+          <td><span class="badge badge-{{ f.status }}">{{ f.status|capitalize }}</span></td>
+          <td><a href="{{ url_for('invoices.invoice_detail', invoice_id=f.id) }}">Ver detalhes</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+{% endblock %}

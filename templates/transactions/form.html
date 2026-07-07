@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if transaction else 'Novo' }} lançamento - Finanças da Família{% endblock %}
+{% block content %}
+<h1>{{ 'Editar lançamento' if transaction else 'Novo lançamento' }}</h1>
+
+<form class="form-card card" method="post">
+  <div class="form-row">
+    <label for="description">Descrição</label>
+    <input type="text" id="description" name="description" value="{{ transaction.description if transaction else '' }}" required>
+  </div>
+
+  <div class="form-row">
+    <label for="amount">Valor {{ '(valor total da compra)' if not transaction else '' }}</label>
+    <input type="text" id="amount" name="amount" value="{{ '%.2f'|format(transaction.amount) if transaction else '' }}" placeholder="0.00" required>
+  </div>
+
+  <div class="form-row">
+    <label for="date">Data {{ 'da compra' if not transaction else '' }}</label>
+    <input type="date" id="date" name="date" value="{{ transaction.date.isoformat() if transaction else '' }}" required>
+  </div>
+
+  <div class="form-row">
+    <label for="category_id">Categoria</label>
+    <select id="category_id" name="category_id">
+      <option value="">-- sem categoria --</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if transaction and transaction.category_id == c.id %}selected{% endif %}>{{ c.name }} ({{ c.kind }})</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  {% if transaction %}
+    <div class="form-row">
+      <label>Tipo</label>
+      <div>
+        <span class="badge badge-{{ transaction.kind }}">{{ transaction.kind|capitalize }}</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Conta</label>
+      <div>{{ transaction.account.name }}</div>
+    </div>
+    {% if transaction.installment_total and transaction.installment_total > 1 %}
+      <p class="installment-tag">
+        Parcela {{ transaction.installment_number }}/{{ transaction.installment_total }} —
+        editar aqui altera somente esta parcela.
+      </p>
+    {% endif %}
+  {% else %}
+    <div class="form-row">
+      <label for="kind">Tipo</label>
+      <select id="kind" name="kind">
+        <option value="despesa">Despesa</option>
+        <option value="receita">Receita</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="account_id">Conta</label>
+      <select id="account_id" name="account_id" onchange="toggleInstallments()">
+        <option value="">-- selecione --</option>
+        {% for a in accounts %}
+          <option value="{{ a.id }}" data-card="{{ 'true' if a.is_card else 'false' }}">{{ a.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-row" id="installments-row" style="display:none">
+      <label for="installments">Número de parcelas</label>
+      <input type="number" id="installments" name="installments" min="1" max="48" value="1">
+    </div>
+  {% endif %}
+
+  <div class="form-actions">
+    <button type="submit" class="btn">Salvar</button>
+    <a class="btn btn-secondary" href="{{ url_for('transactions.list_transactions') }}">Cancelar</a>
+  </div>
+</form>
+
+{% if not accounts %}
+  <p class="empty-state">Você precisa <a href="{{ url_for('accounts.new_account') }}">criar uma conta</a> antes de lançar algo.</p>
+{% endif %}
+
+<script>
+function toggleInstallments() {
+  const select = document.getElementById('account_id');
+  const opt = select.options[select.selectedIndex];
+  const isCard = opt && opt.dataset.card === 'true';
+  document.getElementById('installments-row').style.display = isCard ? 'flex' : 'none';
+}
+</script>
+{% endblock %}

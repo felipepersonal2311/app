@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if account else 'Nova' }} conta - Finanças da Família{% endblock %}
+{% block content %}
+<h1>{{ 'Editar conta' if account else 'Nova conta/cartão' }}</h1>
+
+<form class="form-card card" method="post">
+  <div class="form-row">
+    <label for="name">Nome</label>
+    <input type="text" id="name" name="name" value="{{ account.name if account else '' }}" required>
+  </div>
+
+  {% if not account %}
+  <div class="form-row">
+    <label for="kind">Tipo</label>
+    <select id="kind" name="kind" onchange="toggleCardFields()">
+      {% for value, label in kinds.items() %}
+        <option value="{{ value }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  <div id="card-fields" style="{{ '' if (account and account.is_card) else 'display:none' }}">
+    <div class="form-row">
+      <label for="closing_day">Dia de fechamento da fatura</label>
+      <input type="number" id="closing_day" name="closing_day" min="1" max="31" value="{{ account.closing_day if account else '' }}">
+    </div>
+    <div class="form-row">
+      <label for="due_day">Dia de vencimento da fatura</label>
+      <input type="number" id="due_day" name="due_day" min="1" max="31" value="{{ account.due_day if account else '' }}">
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn">Salvar</button>
+    <a class="btn btn-secondary" href="{{ url_for('accounts.list_accounts') }}">Cancelar</a>
+  </div>
+</form>
+
+<script>
+function toggleCardFields() {
+  const kind = document.getElementById('kind').value;
+  document.getElementById('card-fields').style.display = kind === 'cartao' ? 'block' : 'none';
+}
+</script>
+{% endblock %}
