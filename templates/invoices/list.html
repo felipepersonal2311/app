@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Faturas - Finanças da Família{% endblock %}
 {% block content %}
-<h1>Faturas</h1>
+<h1>💳 Faturas</h1>
 
 {% if not cards %}
-  <p class="empty-state">Você ainda não tem nenhum cartão cadastrado. <a href="{{ url_for('accounts.new_account') }}">Criar cartão</a></p>
+  <p class="empty-state"><span class="empty-icon">💳</span>Você ainda não tem nenhum cartão cadastrado. <a href="{{ url_for('accounts.new_account') }}">Criar cartão</a></p>
 {% elif not invoices %}
-  <p class="empty-state">Nenhuma fatura gerada ainda. Lance uma compra no cartão para criar a primeira fatura.</p>
+  <p class="empty-state"><span class="empty-icon">🧾</span>Nenhuma fatura gerada ainda. Lance uma compra no cartão para criar a primeira fatura.</p>
 {% else %}
   <div class="card">
     <table>

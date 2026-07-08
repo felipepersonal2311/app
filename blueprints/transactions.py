@@ -9,6 +9,11 @@ from extensions import db
 from models import Account, Category, Transaction, User
 from services import purchase_invoice_period, get_or_create_invoice, split_installments, add_months
 
+MONTH_NAMES = [
+    "", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+]
+
 bp = Blueprint("transactions", __name__, url_prefix="/lancamentos")
 
 
@@ -62,6 +67,9 @@ def list_transactions():
 
     transactions = query.order_by(Transaction.date.desc(), Transaction.id.desc()).all()
 
+    prev_year, prev_month = add_months(year, month, -1)
+    next_year, next_month = add_months(year, month, 1)
+
     return render_template(
         "transactions/list.html",
         transactions=transactions,
@@ -69,6 +77,11 @@ def list_transactions():
         month=month,
         who=who,
         users=_household_users(),
+        month_names=MONTH_NAMES,
+        prev_year=prev_year,
+        prev_month=prev_month,
+        next_year=next_year,
+        next_month=next_month,
     )
 
 
@@ -77,6 +90,7 @@ def list_transactions():
 def new_transaction():
     accounts = _household_accounts()
     categories = _household_categories()
+    today = date.today().isoformat()
 
     if request.method == "POST":
         description = request.form["description"].strip()
@@ -110,7 +124,7 @@ def new_transaction():
         if errors:
             for e in errors:
                 flash(e, "error")
-            return render_template("transactions/form.html", transaction=None, accounts=accounts, categories=categories)
+            return render_template("transactions/form.html", transaction=None, accounts=accounts, categories=categories, today=today)
 
         if account.is_card and kind == "despesa" and installments > 1:
             group = uuid.uuid4().hex[:16]
@@ -152,9 +166,12 @@ def new_transaction():
 
         db.session.commit()
         flash("Lançamento criado com sucesso!", "success")
+
+        if request.form.get("and_new"):
+            return redirect(url_for("transactions.new_transaction"))
         return redirect(url_for("transactions.list_transactions"))
 
-    return render_template("transactions/form.html", transaction=None, accounts=accounts, categories=categories)
+    return render_template("transactions/form.html", transaction=None, accounts=accounts, categories=categories, today=today)
 
 
 @bp.route("/<int:transaction_id>/editar", methods=["GET", "POST"])

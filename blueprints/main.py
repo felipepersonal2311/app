@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 
 from extensions import db
 from models import Account, Invoice, Transaction, User
+from services import add_months
 
 bp = Blueprint("main", __name__)
 
@@ -73,6 +74,10 @@ def dashboard():
             total += t.amount if t.kind == "receita" else -t.amount
         saldos[a.id] = total
 
+    prev_year, prev_month = add_months(year, month, -1)
+    next_year, next_month = add_months(year, month, 1)
+    max_categoria = por_categoria[0][1] if por_categoria else 0
+
     return render_template(
         "main/dashboard.html",
         year=year,
@@ -84,7 +89,13 @@ def dashboard():
         despesas_avulsas=despesas_avulsas,
         gastos_cartao=gastos_cartao,
         por_categoria=por_categoria,
+        max_categoria=max_categoria,
         faturas_no_mes=faturas_no_mes,
         accounts=accounts,
         saldos=saldos,
+        prev_year=prev_year,
+        prev_month=prev_month,
+        next_year=next_year,
+        next_month=next_month,
+        today=today,
     )

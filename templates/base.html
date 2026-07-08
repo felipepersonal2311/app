@@ -12,11 +12,11 @@
     <div class="topbar-inner">
       <a class="brand" href="{{ url_for('main.dashboard') }}">💰 Finanças</a>
       <nav>
-        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('transactions.list_transactions') }}">Lançamentos</a>
-        <a href="{{ url_for('accounts.list_accounts') }}">Contas &amp; Cartões</a>
-        <a href="{{ url_for('invoices.list_invoices') }}">Faturas</a>
-        <a href="{{ url_for('categories.list_categories') }}">Categorias</a>
+        <a href="{{ url_for('main.dashboard') }}" class="{{ 'active' if request.endpoint == 'main.dashboard' }}">📊 Dashboard</a>
+        <a href="{{ url_for('transactions.list_transactions') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('transactions.') }}">🧾 Lançamentos</a>
+        <a href="{{ url_for('accounts.list_accounts') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('accounts.') }}">🏦 Contas &amp; Cartões</a>
+        <a href="{{ url_for('invoices.list_invoices') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('invoices.') }}">💳 Faturas</a>
+        <a href="{{ url_for('categories.list_categories') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('categories.') }}">🏷️ Categorias</a>
       </nav>
       <div class="user-box">
         <span>{{ current_user.name }} · {{ current_user.household.name }}</span>
@@ -31,7 +31,7 @@
   <main class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <div class="flashes">
+        <div class="flashes" id="flashes">
           {% for category, message in messages %}
             <div class="flash flash-{{ category }}">{{ message }}</div>
           {% endfor %}
@@ -41,5 +41,18 @@
 
     {% block content %}{% endblock %}
   </main>
+
+  {% if current_user.is_authenticated %}
+    <a class="fab" href="{{ url_for('transactions.new_transaction') }}" title="Novo lançamento">+</a>
+  {% endif %}
+
+  <script>
+    setTimeout(function () {
+      var flashes = document.getElementById('flashes');
+      if (!flashes) return;
+      flashes.style.opacity = '0';
+      setTimeout(function () { flashes.remove(); }, 400);
+    }, 3500);
+  </script>
 </body>
 </html>

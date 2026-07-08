@@ -6,17 +6,17 @@
 <form class="form-card card" method="post">
   <div class="form-row">
     <label for="description">Descrição</label>
-    <input type="text" id="description" name="description" value="{{ transaction.description if transaction else '' }}" required>
+    <input type="text" id="description" name="description" value="{{ transaction.description if transaction else '' }}" required autofocus>
   </div>
 
   <div class="form-row">
     <label for="amount">Valor {{ '(valor total da compra)' if not transaction else '' }}</label>
-    <input type="text" id="amount" name="amount" value="{{ '%.2f'|format(transaction.amount) if transaction else '' }}" placeholder="0.00" required>
+    <input type="text" id="amount" name="amount" value="{{ '%.2f'|format(transaction.amount) if transaction else '' }}" placeholder="0.00" required oninput="updateInstallmentPreview()">
   </div>
 
   <div class="form-row">
     <label for="date">Data {{ 'da compra' if not transaction else '' }}</label>
-    <input type="date" id="date" name="date" value="{{ transaction.date.isoformat() if transaction else '' }}" required>
+    <input type="date" id="date" name="date" value="{{ transaction.date.isoformat() if transaction else today }}" required>
   </div>
 
   <div class="form-row">
@@ -38,7 +38,7 @@
     </div>
     <div class="form-row">
       <label>Conta</label>
-      <div>{{ transaction.account.name }}</div>
+      <div>🏦 {{ transaction.account.name }}</div>
     </div>
     {% if transaction.installment_total and transaction.installment_total > 1 %}
       <p class="installment-tag">
@@ -50,8 +50,8 @@
     <div class="form-row">
       <label for="kind">Tipo</label>
       <select id="kind" name="kind">
-        <option value="despesa">Despesa</option>
-        <option value="receita">Receita</option>
+        <option value="despesa">💸 Despesa</option>
+        <option value="receita">💰 Receita</option>
       </select>
     </div>
 
@@ -60,19 +60,23 @@
       <select id="account_id" name="account_id" onchange="toggleInstallments()">
         <option value="">-- selecione --</option>
         {% for a in accounts %}
-          <option value="{{ a.id }}" data-card="{{ 'true' if a.is_card else 'false' }}">{{ a.name }}</option>
+          <option value="{{ a.id }}" data-card="{{ 'true' if a.is_card else 'false' }}">{{ '💳' if a.is_card else '🏦' }} {{ a.name }}</option>
         {% endfor %}
       </select>
     </div>
 
     <div class="form-row" id="installments-row" style="display:none">
       <label for="installments">Número de parcelas</label>
-      <input type="number" id="installments" name="installments" min="1" max="48" value="1">
+      <input type="number" id="installments" name="installments" min="1" max="48" value="1" oninput="updateInstallmentPreview()">
+      <span class="installment-tag" id="installment-preview"></span>
     </div>
   {% endif %}
 
   <div class="form-actions">
-    <button type="submit" class="btn">Salvar</button>
+    <button type="submit" class="btn">✓ Salvar</button>
+    {% if not transaction %}
+      <button type="submit" name="and_new" value="1" class="btn btn-secondary">✓ Salvar e lançar outro</button>
+    {% endif %}
     <a class="btn btn-secondary" href="{{ url_for('transactions.list_transactions') }}">Cancelar</a>
   </div>
 </form>
@@ -87,6 +91,20 @@ function toggleInstallments() {
   const opt = select.options[select.selectedIndex];
   const isCard = opt && opt.dataset.card === 'true';
   document.getElementById('installments-row').style.display = isCard ? 'flex' : 'none';
+  updateInstallmentPreview();
+}
+
+function updateInstallmentPreview() {
+  const preview = document.getElementById('installment-preview');
+  if (!preview) return;
+  const amount = parseFloat((document.getElementById('amount').value || '0').replace(',', '.'));
+  const installments = parseInt(document.getElementById('installments').value || '1', 10);
+  if (!amount || installments <= 1) {
+    preview.textContent = '';
+    return;
+  }
+  const parcela = (amount / installments).toFixed(2).replace('.', ',');
+  preview.textContent = installments + 'x de R$ ' + parcela;
 }
 </script>
 {% endblock %}

@@ -3,17 +3,24 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Dashboard</h1>
+  <h1>📊 Dashboard</h1>
   <div class="installment-tag">
     Código de convite da família: <strong>{{ current_user.household.invite_code }}</strong>
     (compartilhe para dar acesso a mais alguém)
   </div>
 </div>
 
-<form class="filters" method="get">
+<div class="month-nav">
+  <a class="month-nav-btn" href="{{ url_for('main.dashboard', mes=prev_month, ano=prev_year, quem=who) }}" title="Mês anterior">‹</a>
+  <span class="month-label">{{ month_names[month] }}/{{ year }}</span>
+  <a class="month-nav-btn" href="{{ url_for('main.dashboard', mes=next_month, ano=next_year, quem=who) }}" title="Próximo mês">›</a>
+  <a class="month-nav-today" href="{{ url_for('main.dashboard') }}">Hoje</a>
+</div>
+
+<form class="filters" method="get" id="filter-form">
   <div class="field">
     <label for="mes">Mês</label>
-    <select id="mes" name="mes">
+    <select id="mes" name="mes" onchange="document.getElementById('filter-form').submit()">
       {% for i in range(1, 13) %}
         <option value="{{ i }}" {% if i == month %}selected{% endif %}>{{ month_names[i] }}</option>
       {% endfor %}
@@ -21,11 +28,11 @@
   </div>
   <div class="field">
     <label for="ano">Ano</label>
-    <input type="number" id="ano" name="ano" value="{{ year }}" style="width:90px">
+    <input type="number" id="ano" name="ano" value="{{ year }}" style="width:90px" onchange="document.getElementById('filter-form').submit()">
   </div>
   <div class="field">
     <label for="quem">Quem</label>
-    <select id="quem" name="quem">
+    <select id="quem" name="quem" onchange="document.getElementById('filter-form').submit()">
       <option value="todos" {% if who == 'todos' %}selected{% endif %}>Todos</option>
       <option value="eu" {% if who == 'eu' %}selected{% endif %}>Só eu</option>
       {% for u in users if u.id != current_user.id %}
@@ -33,26 +40,23 @@
       {% endfor %}
     </select>
   </div>
-  <div class="field">
-    <button type="submit" class="btn btn-secondary">Filtrar</button>
-  </div>
 </form>
 
 <div class="grid">
-  <div class="stat">
-    <div class="label">Receitas no mês</div>
+  <div class="stat stat-income">
+    <div class="label">💰 Receitas no mês</div>
     <div class="value green">R$ {{ "%.2f"|format(receitas) }}</div>
   </div>
-  <div class="stat">
-    <div class="label">Despesas avulsas (conta/dinheiro)</div>
+  <div class="stat stat-expense">
+    <div class="label">🧾 Despesas avulsas (conta/dinheiro)</div>
     <div class="value red">R$ {{ "%.2f"|format(despesas_avulsas) }}</div>
   </div>
-  <div class="stat">
-    <div class="label">Gasto no cartão (compras do mês)</div>
+  <div class="stat stat-expense">
+    <div class="label">💳 Gasto no cartão (compras do mês)</div>
     <div class="value red">R$ {{ "%.2f"|format(gastos_cartao) }}</div>
   </div>
-  <div class="stat">
-    <div class="label">Saldo do mês (receitas - despesas)</div>
+  <div class="stat {{ 'stat-income' if (receitas - despesas_avulsas - gastos_cartao) >= 0 else 'stat-expense' }}">
+    <div class="label">📈 Saldo do mês (receitas - despesas)</div>
     <div class="value {{ 'green' if (receitas - despesas_avulsas - gastos_cartao) >= 0 else 'red' }}">
       R$ {{ "%.2f"|format(receitas - despesas_avulsas - gastos_cartao) }}
     </div>
@@ -60,7 +64,7 @@
 </div>
 
 <div class="card">
-  <h2>Faturas com vencimento em {{ month_names[month] }}/{{ year }}</h2>
+  <h2>💳 Faturas com vencimento em {{ month_names[month] }}/{{ year }}</h2>
   {% if faturas_no_mes %}
     <table>
       <thead>
@@ -85,23 +89,27 @@
 
 <div class="grid">
   <div class="card">
-    <h2>Despesas por categoria</h2>
+    <h2>🏷️ Despesas por categoria</h2>
     {% if por_categoria %}
-      <table>
-        <thead><tr><th>Categoria</th><th>Total</th></tr></thead>
-        <tbody>
-          {% for nome, total in por_categoria %}
-          <tr><td>{{ nome }}</td><td>R$ {{ "%.2f"|format(total) }}</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      {% set colors = ['#2563eb', '#dc2626', '#16a34a', '#d97706', '#7c3aed', '#0891b2', '#db2777', '#65a30d'] %}
+      <div class="bars">
+        {% for nome, total in por_categoria %}
+        <div class="bar-row">
+          <div class="bar-name">{{ nome }}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: {{ ((total / max_categoria * 100)|round(1)) if max_categoria else 0 }}%; background: {{ colors[loop.index0 % colors|length] }};"></div>
+          </div>
+          <div class="bar-value">R$ {{ "%.2f"|format(total) }}</div>
+        </div>
+        {% endfor %}
+      </div>
     {% else %}
-      <p class="empty-state">Nenhuma despesa no período.</p>
+      <p class="empty-state"><span class="empty-icon">🗂️</span>Nenhuma despesa no período.</p>
     {% endif %}
   </div>
 
   <div class="card">
-    <h2>Saldo das contas</h2>
+    <h2>🏦 Saldo das contas</h2>
     {% set non_card = accounts|rejectattr('is_card')|list %}
     {% if non_card %}
       <table>
@@ -118,7 +126,7 @@
         </tbody>
       </table>
     {% else %}
-      <p class="empty-state">Nenhuma conta cadastrada ainda. <a href="{{ url_for('accounts.new_account') }}">Criar conta</a></p>
+      <p class="empty-state"><span class="empty-icon">🏦</span>Nenhuma conta cadastrada ainda. <a href="{{ url_for('accounts.new_account') }}">Criar conta</a></p>
     {% endif %}
   </div>
 </div>

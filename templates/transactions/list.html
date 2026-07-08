@@ -2,31 +2,39 @@
 {% block title %}Lançamentos - Finanças da Família{% endblock %}
 {% block content %}
 <div class="page-header">
-  <h1>Lançamentos</h1>
+  <h1>🧾 Lançamentos</h1>
   <a class="btn" href="{{ url_for('transactions.new_transaction') }}">+ Novo lançamento</a>
 </div>
 
-<form class="filters" method="get">
+<div class="month-nav">
+  <a class="month-nav-btn" href="{{ url_for('transactions.list_transactions', mes=prev_month, ano=prev_year, quem=who) }}" title="Mês anterior">‹</a>
+  <span class="month-label">{{ month_names[month] }}/{{ year }}</span>
+  <a class="month-nav-btn" href="{{ url_for('transactions.list_transactions', mes=next_month, ano=next_year, quem=who) }}" title="Próximo mês">›</a>
+  <a class="month-nav-today" href="{{ url_for('transactions.list_transactions') }}">Hoje</a>
+</div>
+
+<form class="filters" method="get" id="filter-form">
   <div class="field">
     <label for="mes">Mês</label>
-    <input type="number" id="mes" name="mes" min="1" max="12" value="{{ month }}" style="width:70px">
+    <select id="mes" name="mes" onchange="document.getElementById('filter-form').submit()">
+      {% for i in range(1, 13) %}
+        <option value="{{ i }}" {% if i == month %}selected{% endif %}>{{ month_names[i] }}</option>
+      {% endfor %}
+    </select>
   </div>
   <div class="field">
     <label for="ano">Ano</label>
-    <input type="number" id="ano" name="ano" value="{{ year }}" style="width:90px">
+    <input type="number" id="ano" name="ano" value="{{ year }}" style="width:90px" onchange="document.getElementById('filter-form').submit()">
   </div>
   <div class="field">
     <label for="quem">Quem</label>
-    <select id="quem" name="quem">
+    <select id="quem" name="quem" onchange="document.getElementById('filter-form').submit()">
       <option value="todos" {% if who == 'todos' %}selected{% endif %}>Todos</option>
       <option value="eu" {% if who == 'eu' %}selected{% endif %}>Só eu</option>
       {% for u in users if u.id != current_user.id %}
         <option value="{{ u.id }}" {% if who == u.id|string %}selected{% endif %}>{{ u.name }}</option>
       {% endfor %}
     </select>
-  </div>
-  <div class="field">
-    <button type="submit" class="btn btn-secondary">Filtrar</button>
   </div>
 </form>
 
@@ -46,7 +54,7 @@
               <span class="installment-tag">({{ t.installment_number }}/{{ t.installment_total }})</span>
             {% endif %}
           </td>
-          <td>{{ t.account.name }}</td>
+          <td>{{ '💳' if t.account.is_card else '🏦' }} {{ t.account.name }}</td>
           <td>{{ t.category.name if t.category else '-' }}</td>
           <td>{{ t.user.name }}</td>
           <td class="amount-{{ t.kind }}">{{ '+' if t.kind == 'receita' else '-' }} R$ {{ "%.2f"|format(t.amount) }}</td>
@@ -61,7 +69,11 @@
       </tbody>
     </table>
   {% else %}
-    <p class="empty-state">Nenhum lançamento neste período.</p>
+    <p class="empty-state">
+      <span class="empty-icon">🧾</span>
+      Nenhum lançamento neste período.<br>
+      <a href="{{ url_for('transactions.new_transaction') }}">Lançar o primeiro</a>
+    </p>
   {% endif %}
 </div>
 {% endblock %}
