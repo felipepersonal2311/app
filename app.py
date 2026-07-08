@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 
 from extensions import db, login_manager
@@ -6,8 +8,8 @@ from models import User
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "change-me-in-production"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///financas.db"
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "change-me-in-production")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///financas.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
@@ -41,4 +43,6 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "1") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug)
