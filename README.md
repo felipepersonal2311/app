@@ -74,22 +74,38 @@ cor, descrição, foto e dois interruptores independentes:
 - **Visível / Oculto** — controla se a peça aparece no site. Útil para tirar algo
   do ar temporariamente sem apagar o cadastro.
 
-## Publicando o site (deploy)
+## Publicando o site no Render (deploy)
 
-Qualquer serviço que rode aplicações Python/Flask serve, por exemplo
-[Render](https://render.com), [Railway](https://railway.app) ou PythonAnywhere.
-Passos gerais:
+O repositório já vem com um `render.yaml`, então o [Render](https://render.com)
+consegue configurar o serviço quase sozinho.
 
-1. Suba o código para um repositório Git.
-2. No serviço escolhido, aponte para esse repositório e configure o comando de start,
-   por exemplo: `gunicorn app:app` (adicione `gunicorn` ao `requirements.txt` se o
-   serviço pedir um servidor WSGI de produção).
-3. Configure as variáveis de ambiente do arquivo `.env.example` no painel do serviço
-   (principalmente `SECRET_KEY`, `ADMIN_PASSWORD` e `WHATSAPP_NUMBER`).
-4. Garanta que a pasta `instance/` (banco de dados) e `store/static/uploads/products/`
-   (fotos) fiquem num disco persistente — a maioria desses serviços tem um plano
-   gratuito com disco efêmero, então para não perder produtos/fotos a cada deploy
-   vale conferir a opção de "persistent disk" do serviço escolhido.
+1. Crie uma conta em [render.com](https://render.com) (dá para entrar direto com a
+   conta do GitHub).
+2. No painel, clique em **New +** → **Blueprint**.
+3. Escolha o repositório `felipepersonal2311/app` e a branch
+   `claude/fitness-store-website-cdbjyu` (ou a branch principal, depois que o
+   código for mesclado nela).
+4. O Render vai ler o `render.yaml` e mostrar o serviço `loja-fitness` pronto para
+   criar. Antes de confirmar, preencha:
+   - `ADMIN_PASSWORD` — a senha que vai usar para entrar em `/admin` (o campo
+     `sync: false` no `render.yaml` faz o Render pedir esse valor manualmente,
+     em vez de guardá-lo no código).
+   - Se quiser, ajuste `WHATSAPP_NUMBER` e `STORE_NAME` também por ali.
+5. Clique em **Apply** / **Create**. O primeiro deploy leva alguns minutos.
+6. Quando terminar, o Render mostra o link do site, algo como
+   `https://loja-fitness.onrender.com` (o nome exato depende do que estiver
+   disponível). Esse é o link para acessar o catálogo; o painel fica em
+   `<esse link>/admin`.
+
+**Atenção — plano gratuito e persistência de dados:** no plano gratuito do
+Render, o disco onde ficam o banco de dados (`instance/loja.db`) e as fotos
+enviadas (`store/static/uploads/products/`) é apagado a cada novo deploy. Ou
+seja, tudo bem para testar e mostrar o site, mas os produtos cadastrados podem
+sumir quando o código for atualizado de novo. Quando a loja for usar o site
+"para valer", o ideal é migrar para um plano pago do Render (bem barato) e
+adicionar um **disco persistente** apontando para as pastas `instance/` e
+`store/static/uploads/products/` — isso pode ser feito depois, sem precisar
+mudar o código do site.
 
 ## Ideias para evoluir depois
 
