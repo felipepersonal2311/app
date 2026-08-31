@@ -1,0 +1,58 @@
+{% extends "public/layout.html" %}
+{% block title %}{{ product.name }} — {{ store_name }}{% endblock %}
+{% block content %}
+<div class="product-detail">
+  <div class="product-detail-image">
+    {% if product.image_url %}
+      <img src="{{ product.image_url }}" alt="{{ product.name }}">
+    {% else %}
+      <div class="product-image-placeholder large">{{ product.name[:2] | upper }}</div>
+    {% endif %}
+  </div>
+
+  <div class="product-detail-info">
+    <span class="product-category">{{ product.category }}</span>
+    <h1>{{ product.name }}</h1>
+    <p class="product-price">{{ product.price_display }}</p>
+
+    {% if product.in_stock %}
+      <span class="badge badge-in">Disponível</span>
+    {% else %}
+      <span class="badge badge-out">Esgotado</span>
+    {% endif %}
+
+    {% if product.description %}<p class="product-description">{{ product.description }}</p>{% endif %}
+    {% if product.color %}<p class="product-meta"><strong>Cor:</strong> {{ product.color }}</p>{% endif %}
+
+    <form id="add-to-cart-form" class="add-to-cart-form"
+      data-product-id="{{ product.id }}"
+      data-product-name="{{ product.name }}"
+      data-product-price="{{ product.price_cents }}"
+      data-product-image="{{ product.image_url or '' }}">
+
+      {% if product.size_list %}
+      <label for="size">Tamanho</label>
+      <select name="size" id="size" required>
+        <option value="" disabled selected>Escolha um tamanho</option>
+        {% for s in product.size_list %}
+        <option value="{{ s }}">{{ s }}</option>
+        {% endfor %}
+      </select>
+      {% endif %}
+
+      <label for="qty">Quantidade</label>
+      <input type="number" id="qty" name="qty" min="1" value="1">
+
+      <button type="submit" class="btn btn-add" {{ 'disabled' if not product.in_stock else '' }}>
+        {{ 'Produto esgotado' if not product.in_stock else 'Adicionar ao carrinho' }}
+      </button>
+    </form>
+
+    <p id="add-to-cart-feedback" class="feedback" hidden>
+      Adicionado ao carrinho! <a href="{{ url_for('public.cart') }}">Ver carrinho</a>
+    </p>
+
+    <a href="{{ url_for('public.catalog') }}" class="back-link">&larr; Voltar ao catálogo</a>
+  </div>
+</div>
+{% endblock %}

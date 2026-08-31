@@ -1,0 +1,22 @@
+{% extends "public/layout.html" %}
+{% block title %}Carrinho — {{ store_name }}{% endblock %}
+{% block content %}
+<h1>Seu Carrinho</h1>
+
+<div id="cart-empty" class="empty-state" hidden>
+  Seu carrinho está vazio. <a href="{{ url_for('public.catalog') }}">Ver produtos</a>
+</div>
+
+<div id="cart-items" class="cart-items"></div>
+
+<div id="cart-summary" class="cart-summary" hidden>
+  <p class="cart-total">Total: <span id="cart-total">R$ 0,00</span></p>
+  <a id="checkout-whatsapp" class="btn btn-whatsapp" href="#" target="_blank" rel="noopener">
+    Finalizar pedido pelo WhatsApp
+  </a>
+  <p class="cart-note">
+    Ao finalizar, você será direcionado(a) para o WhatsApp para confirmar seu pedido com a gente —
+    ainda não é possível pagar diretamente pelo site.
+  </p>
+</div>
+{% endblock %}

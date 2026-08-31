@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="admin-shell">
+  <header class="admin-topbar">
+    <span class="brand">{{ store_name }} · Admin</span>
+    <nav>
+      <a href="{{ url_for('admin.dashboard') }}">Produtos</a>
+      <a href="{{ url_for('public.catalog') }}" target="_blank" rel="noopener">Ver site</a>
+      <a href="{{ url_for('admin.logout') }}">Sair</a>
+    </nav>
+  </header>
+  <main class="admin-main container">
+    {% block admin_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}
