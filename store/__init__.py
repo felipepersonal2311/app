@@ -12,14 +12,18 @@ csrf = CSRFProtect()
 def create_app():
     app = Flask(__name__)
 
-    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-    instance_dir = os.path.join(basedir, "instance")
-    os.makedirs(instance_dir, exist_ok=True)
-
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-troque-em-producao")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URL", f"sqlite:///{os.path.join(instance_dir, 'loja.db')}"
-    )
+
+    database_url = os.environ.get("DATABASE_URL")
+    if database_url:
+        # Supabase/Postgres configurado: nunca tocar no disco local (a Vercel,
+        # por exemplo, só permite escrita em /tmp).
+        app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+    else:
+        basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+        instance_dir = os.path.join(basedir, "instance")
+        os.makedirs(instance_dir, exist_ok=True)
+        app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(instance_dir, 'loja.db')}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # Sem pool de conexões: cada invocação serverless (Vercel) parte de um processo
     # novo, então reaproveitar conexões entre requisições não ajuda e pode deixar
