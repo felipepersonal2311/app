@@ -13,7 +13,7 @@ class Product(db.Model):
     price_cents = db.Column(db.Integer, nullable=False, default=0)
     sizes = db.Column(db.String(120), nullable=True)
     color = db.Column(db.String(60), nullable=True)
-    image_filename = db.Column(db.String(255), nullable=True)
+    image_url = db.Column(db.String(500), nullable=True)
     in_stock = db.Column(db.Boolean, nullable=False, default=True)
     active = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

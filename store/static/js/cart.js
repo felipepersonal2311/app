@@ -111,7 +111,7 @@
         total += item.price * item.qty;
         var safeName = escapeHtml(item.name);
         var imageTag = item.image
-          ? '<img src="/static/uploads/products/' + encodeURIComponent(item.image) + '" alt="' + safeName + '">'
+          ? '<img src="' + escapeHtml(item.image) + '" alt="' + safeName + '">'
           : '<div class="product-image-placeholder small">' + escapeHtml(item.name.slice(0, 2).toUpperCase()) + "</div>";
 
         return (

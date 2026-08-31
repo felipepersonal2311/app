@@ -1,16 +1,19 @@
-import os
+import io
 import secrets
 
 from flask import Blueprint, current_app, flash, redirect, render_template, request, session, url_for
 from PIL import Image
 from werkzeug.utils import secure_filename
 
+from . import storage
 from .auth import login_required
 from .models import Product, db
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
+MIME_TYPES = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "webp": "image/webp"}
+PIL_FORMATS = {"png": "PNG", "jpg": "JPEG", "jpeg": "JPEG", "webp": "WEBP"}
 
 
 def _allowed_file(filename):
@@ -40,15 +43,6 @@ def _apply_form(product, form):
     product.active = "active" in form
 
 
-def _remove_image_file(filename):
-    path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
-    if os.path.exists(path):
-        try:
-            os.remove(path)
-        except OSError:
-            pass
-
-
 def _handle_image_upload(product, file_storage):
     if not file_storage or not file_storage.filename:
         return
@@ -66,18 +60,27 @@ def _handle_image_upload(product, file_storage):
         image.thumbnail((1200, 1200))
         if ext in ("jpg", "jpeg") and image.mode != "RGB":
             image = image.convert("RGB")
+        buffer = io.BytesIO()
+        image.save(buffer, format=PIL_FORMATS[ext])
     except Exception:
         flash("Não foi possível processar a imagem enviada. Tente outro arquivo.", "error")
         return
 
     filename = secure_filename(f"{secrets.token_hex(8)}.{ext}")
-    path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
-    image.save(path)
+    try:
+        image_url = storage.upload_image(filename, buffer.getvalue(), MIME_TYPES[ext])
+    except storage.StorageNotConfigured as exc:
+        flash(str(exc), "error")
+        return
+    except Exception:
+        current_app.logger.exception("Falha ao enviar imagem para o Supabase Storage")
+        flash("Falha ao enviar a imagem para o armazenamento. Tente novamente.", "error")
+        return
 
-    old_filename = product.image_filename
-    product.image_filename = filename
-    if old_filename:
-        _remove_image_file(old_filename)
+    old_url = product.image_url
+    product.image_url = image_url
+    if old_url:
+        storage.delete_image(old_url.rsplit("/", 1)[-1])
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -161,8 +164,8 @@ def edit_product(product_id):
 @login_required
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
-    if product.image_filename:
-        _remove_image_file(product.image_filename)
+    if product.image_url:
+        storage.delete_image(product.image_url.rsplit("/", 1)[-1])
     db.session.delete(product)
     db.session.commit()
     flash("Produto excluído.", "success")

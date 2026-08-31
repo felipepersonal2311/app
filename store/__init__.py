@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_wtf import CSRFProtect
+from sqlalchemy.pool import NullPool
 
 from .models import db
 
@@ -20,14 +21,15 @@ def create_app():
         "DATABASE_URL", f"sqlite:///{os.path.join(instance_dir, 'loja.db')}"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["UPLOAD_FOLDER"] = os.path.join(app.static_folder, "uploads", "products")
+    # Sem pool de conexões: cada invocação serverless (Vercel) parte de um processo
+    # novo, então reaproveitar conexões entre requisições não ajuda e pode deixar
+    # conexões "penduradas" no Postgres/pgbouncer do Supabase.
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"poolclass": NullPool}
     app.config["MAX_CONTENT_LENGTH"] = 6 * 1024 * 1024  # 6 MB por upload
     app.config["WHATSAPP_NUMBER"] = os.environ.get("WHATSAPP_NUMBER", "5561996994875")
     app.config["ADMIN_USERNAME"] = os.environ.get("ADMIN_USERNAME", "admin")
     app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD", "troque-esta-senha")
     app.config["STORE_NAME"] = os.environ.get("STORE_NAME", "Minha Loja Fitness")
-
-    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
     db.init_app(app)
     csrf.init_app(app)

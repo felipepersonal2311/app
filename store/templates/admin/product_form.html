@@ -37,8 +37,8 @@
   <textarea id="description" name="description" rows="4">{{ product.description if product else '' }}</textarea>
 
   <label for="image">Foto da peça</label>
-  {% if product and product.image_filename %}
-    <img class="current-image-preview" src="{{ url_for('static', filename='uploads/products/' + product.image_filename) }}" alt="{{ product.name }}">
+  {% if product and product.image_url %}
+    <img class="current-image-preview" src="{{ product.image_url }}" alt="{{ product.name }}">
   {% endif %}
   <input type="file" id="image" name="image" accept="image/png,image/jpeg,image/webp">
 
