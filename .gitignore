@@ -5,3 +5,7 @@ instance/
 .env
 venv/
 .venv/
+
+# Uploaded product photos (not versioned; kept on the deployed server's disk)
+store/static/uploads/products/*
+!store/static/uploads/products/.gitkeep

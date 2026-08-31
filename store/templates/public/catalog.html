@@ -1,0 +1,40 @@
+{% extends "public/layout.html" %}
+{% block title %}{{ store_name }} — Catálogo{% endblock %}
+{% block content %}
+<div class="catalog-header">
+  <h1>Nossas Peças</h1>
+  <div class="category-filters">
+    <a href="{{ url_for('public.catalog') }}" class="chip {{ 'active' if not selected_category else '' }}">Todas</a>
+    {% for c in categories %}
+      <a href="{{ url_for('public.catalog', categoria=c) }}" class="chip {{ 'active' if selected_category == c else '' }}">{{ c }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+{% if products %}
+<div class="product-grid">
+  {% for p in products %}
+  <article class="product-card {{ 'out-of-stock' if not p.in_stock else '' }}">
+    <a href="{{ url_for('public.product_detail', product_id=p.id) }}" class="product-image-link">
+      {% if p.image_filename %}
+        <img src="{{ url_for('static', filename='uploads/products/' + p.image_filename) }}" alt="{{ p.name }}" loading="lazy">
+      {% else %}
+        <div class="product-image-placeholder">{{ p.name[:2] | upper }}</div>
+      {% endif %}
+      {% if not p.in_stock %}<span class="badge badge-out">Esgotado</span>{% endif %}
+    </a>
+    <div class="product-info">
+      <span class="product-category">{{ p.category }}</span>
+      <h2 class="product-name">{{ p.name }}</h2>
+      <p class="product-price">{{ p.price_display }}</p>
+      <a href="{{ url_for('public.product_detail', product_id=p.id) }}" class="btn btn-add {{ 'btn-disabled' if not p.in_stock else '' }}">
+        {{ 'Esgotado' if not p.in_stock else 'Ver produto' }}
+      </a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty-state">Nenhum produto encontrado nessa categoria.</p>
+{% endif %}
+{% endblock %}

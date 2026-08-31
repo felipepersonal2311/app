@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="{{ url_for('public.catalog') }}" class="brand">{{ store_name }}</a>
+    <nav class="main-nav">
+      <a href="{{ url_for('public.catalog') }}">Catálogo</a>
+      <a href="{{ url_for('public.cart') }}" class="cart-link">
+        Carrinho <span class="cart-count" id="cart-count" hidden>0</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>{{ store_name }} — feito com carinho 💪</p>
+    <a class="whatsapp-fab" href="https://wa.me/{{ whatsapp_number }}" target="_blank" rel="noopener">
+      Falar no WhatsApp
+    </a>
+  </div>
+</footer>
+
+<script>
+  window.STORE_CONFIG = {
+    whatsappNumber: {{ whatsapp_number | tojson }},
+    storeName: {{ store_name | tojson }}
+  };
+</script>
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}

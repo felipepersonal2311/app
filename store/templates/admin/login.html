@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login — Admin{% endblock %}
+{% block body %}
+<div class="admin-login-wrapper">
+  <form method="post" class="admin-login-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h1>{{ store_name }}</h1>
+    <p class="subtitle">Painel administrativo</p>
+
+    <label for="username">Usuário</label>
+    <input type="text" id="username" name="username" required autofocus autocomplete="username">
+
+    <label for="password">Senha</label>
+    <input type="password" id="password" name="password" required autocomplete="current-password">
+
+    <button type="submit" class="btn btn-primary">Entrar</button>
+  </form>
+</div>
+{% endblock %}

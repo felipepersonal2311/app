@@ -1,0 +1,60 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ 'Editar' if product else 'Nova' }} peça — Admin{% endblock %}
+{% block admin_content %}
+<h1>{{ 'Editar peça' if product else 'Nova peça' }}</h1>
+
+<form method="post" enctype="multipart/form-data" class="product-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <label for="name">Nome da peça</label>
+  <input type="text" id="name" name="name" required value="{{ product.name if product else '' }}">
+
+  <label for="category">Categoria</label>
+  <input type="text" id="category" name="category" list="category-suggestions" required
+    value="{{ product.category if product else '' }}">
+  <datalist id="category-suggestions">
+    <option value="Legging">
+    <option value="Top">
+    <option value="Shorts">
+    <option value="Camiseta">
+    <option value="Regata">
+    <option value="Conjunto">
+    <option value="Moletom">
+    <option value="Acessórios">
+  </datalist>
+
+  <label for="price">Preço (R$)</label>
+  <input type="text" id="price" name="price" inputmode="decimal" placeholder="Ex: 89,90" required
+    value="{{ ('%.2f' % (product.price_cents / 100))|replace('.', ',') if product else '' }}">
+
+  <label for="sizes">Tamanhos disponíveis (separe por vírgula)</label>
+  <input type="text" id="sizes" name="sizes" placeholder="Ex: P, M, G, GG" value="{{ product.sizes if product else '' }}">
+
+  <label for="color">Cor</label>
+  <input type="text" id="color" name="color" value="{{ product.color if product else '' }}">
+
+  <label for="description">Descrição</label>
+  <textarea id="description" name="description" rows="4">{{ product.description if product else '' }}</textarea>
+
+  <label for="image">Foto da peça</label>
+  {% if product and product.image_filename %}
+    <img class="current-image-preview" src="{{ url_for('static', filename='uploads/products/' + product.image_filename) }}" alt="{{ product.name }}">
+  {% endif %}
+  <input type="file" id="image" name="image" accept="image/png,image/jpeg,image/webp">
+
+  <label class="checkbox-label">
+    <input type="checkbox" name="in_stock" {{ 'checked' if not product or product.in_stock else '' }}>
+    Em estoque (disponível para compra)
+  </label>
+
+  <label class="checkbox-label">
+    <input type="checkbox" name="active" {{ 'checked' if not product or product.active else '' }}>
+    Visível no site
+  </label>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{{ 'Salvar alterações' if product else 'Cadastrar peça' }}</button>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
