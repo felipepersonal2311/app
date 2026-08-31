@@ -1,8 +1,43 @@
-from flask import Blueprint, render_template, request
+import os
+
+from flask import Blueprint, current_app, jsonify, render_template, request
 
 from .models import Product, db
 
 bp = Blueprint("public", __name__)
+
+
+@bp.route("/__debug")
+def debug_files():
+    def listing(path):
+        try:
+            return sorted(os.listdir(path))
+        except Exception as exc:
+            return f"ERRO: {exc}"
+
+    app = current_app
+    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    templates_dir = os.path.join(basedir, "templates")
+    static_dir = os.path.join(basedir, "static")
+
+    return jsonify(
+        {
+            "cwd": os.getcwd(),
+            "__file__": os.path.abspath(__file__),
+            "basedir_calculado": basedir,
+            "basedir_existe": os.path.isdir(basedir),
+            "conteudo_basedir": listing(basedir),
+            "app_root_path": app.root_path,
+            "app_template_folder": app.template_folder,
+            "app_static_folder": app.static_folder,
+            "jinja_searchpath": list(app.jinja_loader.searchpath) if app.jinja_loader else None,
+            "templates_dir_existe": os.path.isdir(templates_dir),
+            "conteudo_templates_dir": listing(templates_dir),
+            "conteudo_templates_public": listing(os.path.join(templates_dir, "public")),
+            "static_dir_existe": os.path.isdir(static_dir),
+            "conteudo_static_dir": listing(static_dir),
+        }
+    )
 
 
 @bp.route("/")
