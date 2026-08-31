@@ -56,8 +56,13 @@ excluir esses produtos de exemplo pelo painel.
 ## Estrutura do projeto
 
 ```
-app.py                  # ponto de entrada
-vercel.json              # configuração de deploy na Vercel
+app.py                  # ponto de entrada (uso local: python app.py)
+api/index.py             # ponto de entrada usado pela Vercel (importa o app.py)
+vercel.json               # configuração de deploy na Vercel
+templates/                 # HTML (Jinja2) — fica na raiz, não dentro de store/,
+static/                      # porque o empacotador da Vercel não inclui de forma
+  css/style.css               # confiável arquivos que não sejam .py quando estão
+  js/cart.js                   # aninhados dentro de um subpacote Python
 store/
   __init__.py            # cria e configura o app Flask
   models.py               # modelo do Produto
@@ -66,10 +71,6 @@ store/
   auth.py                   # proteção das rotas do admin
   storage.py                 # upload/remoção de fotos no Supabase Storage
   seed.py                     # produtos de exemplo criados na 1ª execução
-  templates/                   # HTML (Jinja2)
-  static/
-    css/style.css               # visual do site
-    js/cart.js                   # carrinho (guardado no navegador do cliente)
 ```
 
 Cada peça tem: nome, categoria, preço, tamanhos (texto livre, ex: "P, M, G, GG"),

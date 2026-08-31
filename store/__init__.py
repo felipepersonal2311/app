@@ -10,7 +10,16 @@ csrf = CSRFProtect()
 
 
 def create_app():
-    app = Flask(__name__)
+    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+    # templates/ e static/ ficam na raiz do projeto (fora do pacote store/) porque
+    # o empacotador Python da Vercel não inclui de forma confiável arquivos que
+    # não sejam .py quando eles estão aninhados dentro de um subpacote.
+    app = Flask(
+        __name__,
+        template_folder=os.path.join(basedir, "templates"),
+        static_folder=os.path.join(basedir, "static"),
+    )
 
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-troque-em-producao")
 
@@ -20,7 +29,6 @@ def create_app():
         # por exemplo, só permite escrita em /tmp).
         app.config["SQLALCHEMY_DATABASE_URI"] = database_url
     else:
-        basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
         instance_dir = os.path.join(basedir, "instance")
         os.makedirs(instance_dir, exist_ok=True)
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(instance_dir, 'loja.db')}"
