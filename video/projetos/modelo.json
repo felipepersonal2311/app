@@ -1,0 +1,18 @@
+{
+  "video": "",
+  "duracao": 0,
+  "fps": 30,
+  "gancho": {
+    "linhas": ["LINHA 1", "LINHA 2"],
+    "duracao": 2.5
+  },
+  "legendas": [],
+  "destaques": [],
+  "pretoEBranco": [],
+  "cta": {
+    "chamada": "COMENTE",
+    "palavra": "TREINO",
+    "duracao": 3
+  },
+  "efeitosSonoros": true
+}

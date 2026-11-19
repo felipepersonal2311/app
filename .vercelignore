@@ -5,3 +5,4 @@ instance/
 .env
 __pycache__/
 *.pyc
+video/

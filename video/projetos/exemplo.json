@@ -1,0 +1,121 @@
+{
+  "video": "exemplo.mp4",
+  "duracao": 23.8,
+  "fps": 30,
+  "gancho": {
+    "linhas": [
+      "TODO MUNDO",
+      "ERRA A FALHA"
+    ],
+    "duracao": 2.6
+  },
+  "legendas": [
+    {
+      "texto": "você acha",
+      "inicio": 2.7,
+      "fim": 3.5
+    },
+    {
+      "texto": "que treinou",
+      "inicio": 3.5,
+      "fim": 4.3
+    },
+    {
+      "texto": "pesado",
+      "inicio": 4.3,
+      "fim": 5.1
+    },
+    {
+      "texto": "mas parou",
+      "inicio": 5.3,
+      "fim": 6.1
+    },
+    {
+      "texto": "longe da",
+      "inicio": 6.1,
+      "fim": 6.8
+    },
+    {
+      "texto": "falha",
+      "inicio": 6.8,
+      "fim": 7.8
+    },
+    {
+      "texto": "olha a",
+      "inicio": 8.2,
+      "fim": 8.9
+    },
+    {
+      "texto": "velocidade",
+      "inicio": 8.9,
+      "fim": 9.8
+    },
+    {
+      "texto": "da primeira rep",
+      "inicio": 9.8,
+      "fim": 11.0
+    },
+    {
+      "texto": "e da última",
+      "inicio": 11.2,
+      "fim": 12.4
+    },
+    {
+      "texto": "quando ela",
+      "inicio": 12.6,
+      "fim": 13.3
+    },
+    {
+      "texto": "fica lenta",
+      "inicio": 13.3,
+      "fim": 14.4
+    },
+    {
+      "texto": "você está",
+      "inicio": 14.6,
+      "fim": 15.3
+    },
+    {
+      "texto": "perto da",
+      "inicio": 15.3,
+      "fim": 16.0
+    },
+    {
+      "texto": "falha",
+      "inicio": 16.0,
+      "fim": 17.0
+    },
+    {
+      "texto": "é aí que",
+      "inicio": 17.2,
+      "fim": 18.0
+    },
+    {
+      "texto": "o músculo",
+      "inicio": 18.0,
+      "fim": 18.9
+    },
+    {
+      "texto": "cresce",
+      "inicio": 18.9,
+      "fim": 20.4
+    }
+  ],
+  "destaques": [
+    "falha",
+    "cresce",
+    "velocidade"
+  ],
+  "pretoEBranco": [
+    [
+      11.2,
+      14.4
+    ]
+  ],
+  "cta": {
+    "chamada": "COMENTE",
+    "palavra": "TREINO",
+    "duracao": 3.2
+  },
+  "efeitosSonoros": true
+}
