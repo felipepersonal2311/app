@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
   AbsoluteFill,
+  Audio,
   continueRender,
   delayRender,
   interpolate,
   Sequence,
   spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
@@ -18,18 +20,7 @@ import { Calendario, CelularFotos, CopiaECola, Entra, Espelho } from "./Aderecos
 import { Balao } from "./Balao";
 import { Efeitos } from "./Efeitos";
 import { ELENCO, Expressao, Personagem, Visual } from "./Personagem";
-
-// Roteiro v1 "Amigas conversando" — 30s a 30fps. Tempos em segundos.
-export const CENAS = {
-  gancho: 0,
-  biaChega: 3,
-  ponto1: 7,
-  ponto2: 12,
-  ponto4e5: 17,
-  virada: 23,
-  cta: 27,
-  fim: 30,
-};
+import { BALAO, FALAS, falandoAgora, Quem, T } from "./roteiro";
 
 const ESCALA = 1.05; // personagens: 315×735
 const TOPO = 1050;
@@ -85,9 +76,11 @@ const Ator: React.FC<{
   bracoDir?: number;
   joinhaDir?: boolean;
   fase?: number;
-}> = ({ v, x, y = 0, fase = 0, ...resto }) => {
+  falando?: boolean;
+}> = ({ v, x, y = 0, fase = 0, falando, expressao, ...resto }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const boca = bocaFalando(expressao, falando, frame);
   const respiro = Math.sin(((frame + fase) / fps) * Math.PI * 0.9) * 0.012;
   const piscar = (frame + fase * 7) % 96 < 4;
   return (
@@ -103,10 +96,19 @@ const Ator: React.FC<{
       }}
     >
       <div style={{ transformOrigin: "150px 690px" }}>
-        <Personagem v={v} piscar={piscar} {...resto} />
+        <Personagem v={v} piscar={piscar} expressao={boca} {...resto} />
       </div>
     </div>
   );
+};
+
+// Enquanto fala, a boca abre e fecha (ritmo irregular para parecer fala)
+const bocaFalando = (base: Expressao, falando: boolean | undefined, frame: number): Expressao => {
+  if (!falando) return base;
+  const aberta = (frame % 7 < 3) !== (frame % 23 < 2);
+  if (base === "triste") return aberta ? "surpresa" : "triste";
+  if (base === "confiante") return aberta ? "feliz" : "confiante";
+  return aberta ? "feliz" : "neutra";
 };
 
 const Confete: React.FC<{ de: number }> = ({ de }) => {
@@ -152,37 +154,32 @@ export const Explicativo: React.FC = () => {
   }, [handle]);
 
   const f = (s: number) => Math.round(s * fps);
+  const agora = frame / fps;
+  const fala = (q: Quem) => falandoAgora(q, agora);
   const mola = (s: number, cfg: { damping: number; stiffness: number; mass: number } = theme.spring.smooth) =>
     spring({ frame: frame - f(s), fps, config: cfg });
 
   // Posições
-  const anaX = interpolate(mola(CENAS.biaChega), [0, 1], [200, 20]);
-  const biaX = interpolate(mola(CENAS.biaChega + 0.1), [0, 1], [1200, 730]) +
-    interpolate(mola(CENAS.ponto2), [0, 1], [0, 20]);
-  const carolX = interpolate(mola(CENAS.ponto2), [0, 1], [1250, 370]);
-  const saida = interpolate(frame, [f(CENAS.cta), f(CENAS.cta) + 12], [0, 1150], {
-    easing: theme.ease.in,
-    ...clamp,
-  });
+  const anaX = interpolate(mola(T.biaChega), [0, 1], [200, 20]);
+  const biaX = interpolate(mola(T.biaChega + 0.1), [0, 1], [1200, 730]) + interpolate(mola(T.ponto2), [0, 1], [0, 20]);
+  const carolX = interpolate(mola(T.ponto2), [0, 1], [1250, 370]);
+  const saida = interpolate(frame, [f(T.cta), f(T.cta) + 12], [0, 1150], { easing: theme.ease.in, ...clamp });
   // Pulos na comemoração
+  const comecaPulo = f(T.virada) + 6;
   const pulo = (fase: number) =>
-    frame >= f(CENAS.virada) + 6
-      ? -Math.abs(Math.sin(((frame - f(CENAS.virada) - 6) / fps) * Math.PI * 2.2 + fase)) * 70
-      : 0;
-  const comemora = frame >= f(CENAS.virada) + 6;
+    frame >= comecaPulo ? -Math.abs(Math.sin(((frame - comecaPulo) / fps) * Math.PI * 2.2 + fase)) * 70 : 0;
+  const comemora = frame >= comecaPulo;
 
-  const anaExpr: Expressao =
-    frame < f(CENAS.ponto1) ? "triste" : frame < f(CENAS.virada) ? "surpresa" : "feliz";
-  const biaFlex = frame >= f(CENAS.biaChega + 1.6) && frame < f(CENAS.ponto1);
-
-  const espelho = interpolate(mola(CENAS.biaChega, theme.spring.snappy), [0, 1], [0, 1]);
+  const anaExpr: Expressao = frame < f(T.ponto1) ? "triste" : frame < f(T.virada) ? "surpresa" : "feliz";
+  const biaFlex = frame >= f(T.biaFlexDe) && frame < f(T.ponto1);
+  const espelho = interpolate(mola(T.biaChega, theme.spring.snappy), [0, 1], [0, 1]);
 
   return (
     <AbsoluteFill>
       <Fundo />
 
       {/* Cena 1: espelho */}
-      {frame < f(CENAS.biaChega) + 20 ? (
+      {frame < f(T.biaChega) + 20 ? (
         <div
           style={{
             position: "absolute",
@@ -206,7 +203,12 @@ export const Explicativo: React.FC = () => {
             }}
           >
             <div style={{ position: "absolute", left: -10, top: 70, transform: "scale(0.6) scaleX(-1)", transformOrigin: "150px 0" }}>
-              <Personagem v={ELENCO.ana} expressao="triste" bracoEsq={30} bracoDir={-30} />
+              <Personagem
+                v={ELENCO.ana}
+                expressao={bocaFalando("triste", fala("ana"), frame)}
+                bracoEsq={30}
+                bracoDir={-30}
+              />
             </div>
           </div>
         </div>
@@ -219,27 +221,30 @@ export const Explicativo: React.FC = () => {
           x={anaX}
           y={pulo(0)}
           expressao={anaExpr}
-          bracoEsq={comemora ? 160 : frame < f(CENAS.biaChega) ? 30 : 12}
-          bracoDir={comemora ? -160 : frame < f(CENAS.biaChega) ? -30 : -12}
+          falando={fala("ana")}
+          bracoEsq={comemora ? 160 : frame < f(T.biaChega) ? 30 : 12}
+          bracoDir={comemora ? -160 : frame < f(T.biaChega) ? -30 : -12}
           fase={0}
         />
-        {frame >= f(CENAS.ponto2) - 2 ? (
+        {frame >= f(T.ponto2) - 2 ? (
           <Ator
             v={ELENCO.carol}
             x={carolX}
             y={pulo(1.2)}
             expressao="feliz"
+            falando={fala("carol")}
             bracoEsq={comemora ? 150 : 14}
             bracoDir={comemora ? -150 : -40}
             fase={11}
           />
         ) : null}
-        {frame >= f(CENAS.biaChega) - 2 ? (
+        {frame >= f(T.biaChega) - 2 ? (
           <Ator
             v={ELENCO.bia}
             x={biaX}
             y={pulo(2.1)}
             expressao="feliz"
+            falando={fala("bia")}
             bracoEsq={comemora ? 160 : 14}
             bracoDir={comemora ? -160 : biaFlex ? -150 : -14}
             fase={23}
@@ -247,96 +252,46 @@ export const Explicativo: React.FC = () => {
         ) : null}
       </div>
 
-      {/* Adereços */}
-      <Entra de={f(CENAS.ponto1)} ate={f(CENAS.ponto2)} x={260} y={290}>
-        <CelularFotos de={f(CENAS.ponto1)} />
+      {/* Adereços (animações internas sincronizadas com a fala) */}
+      <Entra de={f(T.ponto1)} ate={f(T.ponto2)} x={260} y={270}>
+        <CelularFotos de={f(T.checksFotos) - 15} />
       </Entra>
-      <Entra de={f(CENAS.ponto2) + 4} ate={f(CENAS.ponto4e5)} x={160} y={280}>
-        <CopiaECola de={f(CENAS.ponto2) + 4} />
+      <Entra de={f(T.ponto2) + 4} ate={f(T.ponto4e5)} x={160} y={260}>
+        <CopiaECola de={f(T.riscaCopiaECola) - 18} />
       </Entra>
-      <Entra de={f(CENAS.ponto4e5)} ate={f(CENAS.virada)} x={140} y={240}>
-        <Calendario de={f(CENAS.ponto4e5)} seloDe={f(CENAS.ponto4e5 + 3)} />
+      <Entra de={f(T.ponto4e5)} ate={f(T.virada)} x={140} y={220}>
+        <Calendario de={f(T.ponto4e5)} seloDe={f(T.seloAjuste)} />
       </Entra>
 
-      {/* Falas */}
-      <Balao
-        texto="Treino há meses… glúteo não cresce e a *barriga não sai!*"
-        x={40}
-        y={820}
-        largura={640}
-        ponta={0.28}
-        de={f(CENAS.biaChega) + 6}
-        ate={f(CENAS.biaChega + 1.9)}
-      />
-      <Balao
-        texto="Eu tava assim! Até entrar na *consultoria do Felipe*."
-        x={380}
-        y={820}
-        largura={660}
-        ponta={0.78}
-        de={f(CENAS.biaChega + 1.8)}
-        ate={f(CENAS.ponto1)}
-        cor={theme.colors.vermelho}
-      />
-      <Balao
-        texto="Ele começa te *conhecendo*: anamnese e avaliação pelas suas *fotos*."
-        x={300}
-        y={830}
-        largura={740}
-        ponta={0.8}
-        de={f(CENAS.ponto1) + 8}
-        ate={f(CENAS.ponto2)}
-        cor={theme.colors.vermelho}
-      />
-      <Balao
-        texto="E o treino é feito *pra você*. Nada de copia e cola!"
-        x={170}
-        y={830}
-        largura={740}
-        ponta={0.48}
-        de={f(CENAS.ponto2) + 10}
-        ate={f(CENAS.ponto4e5)}
-        cor={theme.colors.azul}
-      />
-      <Balao
-        texto="Todo mês ele *reavalia* e muda o treino."
-        x={380}
-        y={850}
-        largura={660}
-        ponta={0.82}
-        de={f(CENAS.ponto4e5) + 6}
-        ate={f(CENAS.ponto4e5 + 3)}
-        cor={theme.colors.vermelho}
-      />
-      <Balao
-        texto="E se não se adaptar, *ajusta na hora!*"
-        x={190}
-        y={850}
-        largura={680}
-        ponta={0.5}
-        de={f(CENAS.ponto4e5 + 3)}
-        ate={f(CENAS.virada)}
-        cor={theme.colors.azul}
-      />
-      <Balao
-        texto="Tô dentro! Me passa o *contato*!"
-        x={40}
-        y={830}
-        largura={620}
-        ponta={0.26}
-        de={f(CENAS.virada)}
-        ate={f(CENAS.cta)}
-      />
+      {/* Falas: balão + voz */}
+      {FALAS.map((fl) => (
+        <React.Fragment key={fl.id}>
+          {fl.quem !== "felipe" ? (
+            <Balao
+              texto={fl.texto}
+              {...BALAO[fl.quem]}
+              de={fl.id === "ana_1" ? f(T.ganchoDuracao) : f(fl.inicio) - 3}
+              ate={f(fl.fim) + 8}
+              cor={
+                fl.quem === "bia" ? theme.colors.vermelho : fl.quem === "carol" ? theme.colors.azul : theme.colors.marinho
+              }
+            />
+          ) : null}
+          <Sequence from={f(fl.inicio)} layout="none">
+            <Audio src={staticFile(`vozes/${fl.id}.mp3`)} volume={1} />
+          </Sequence>
+        </React.Fragment>
+      ))}
 
-      <Confete de={f(CENAS.virada) + 6} />
+      <Confete de={f(T.virada) + 6} />
 
       {/* Gancho */}
-      <Sequence durationInFrames={f(CENAS.biaChega)} layout="none">
-        <Gancho linhas={["TREINA E NÃO VÊ", "RESULTADO?"]} duracaoFrames={f(CENAS.biaChega)} />
+      <Sequence durationInFrames={f(T.ganchoDuracao)} layout="none">
+        <Gancho linhas={["TREINA E NÃO VÊ", "RESULTADO?"]} duracaoFrames={f(T.ganchoDuracao)} />
       </Sequence>
 
       {/* CTA com o mascote */}
-      <Sequence from={f(CENAS.cta)} layout="none">
+      <Sequence from={f(T.cta)} layout="none">
         <CTA chamada="COMENTE" palavra="CONSULTORIA" />
         <Mascote />
       </Sequence>
@@ -351,6 +306,7 @@ const Mascote: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = spring({ frame: frame - 14, fps, config: theme.spring.bouncy });
+  const falando = falandoAgora("felipe", frame / fps + T.cta);
   return (
     <div
       style={{
@@ -362,7 +318,13 @@ const Mascote: React.FC = () => {
         transformOrigin: "0 0",
       }}
     >
-      <Personagem v={ELENCO.felipe} expressao="confiante" bracoEsq={128} bracoDir={-14} apontaEsq />
+      <Personagem
+        v={ELENCO.felipe}
+        expressao={bocaFalando("confiante", falando, frame)}
+        bracoEsq={128}
+        bracoDir={-14}
+        apontaEsq
+      />
     </div>
   );
 };

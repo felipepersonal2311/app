@@ -2,6 +2,7 @@ import React from "react";
 import { CalculateMetadataFunction, Composition } from "remotion";
 import exemplo from "../projetos/exemplo.json";
 import { Explicativo } from "./explicativo/Explicativo";
+import { T } from "./explicativo/roteiro";
 import { Molde } from "./Molde";
 import type { Projeto } from "./tipos";
 
@@ -29,7 +30,7 @@ export const Root: React.FC = () => (
     width={1080}
     height={1920}
     fps={30}
-    durationInFrames={900}
+    durationInFrames={Math.ceil(T.fim * 30)}
   />
   </>
 );
