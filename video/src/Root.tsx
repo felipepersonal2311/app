@@ -4,11 +4,11 @@ import exemplo from "../projetos/exemplo.json";
 import { Explicativo } from "./explicativo/Explicativo";
 import { T } from "./explicativo/roteiro";
 import { Molde } from "./Molde";
-import type { Projeto } from "./tipos";
+import { linhaDoTempo, type Projeto } from "./tipos";
 
 // Duração e fps vêm do próprio projeto (preenchidos pelo scripts/preparar.py).
 const metadados: CalculateMetadataFunction<Projeto> = ({ props }) => ({
-  durationInFrames: Math.max(1, Math.round(props.duracao * props.fps)),
+  durationInFrames: Math.max(1, Math.round(linhaDoTempo(props).duracaoFinal * props.fps)),
   fps: props.fps,
 });
 

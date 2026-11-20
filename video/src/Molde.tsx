@@ -17,7 +17,7 @@ import { Gancho } from "./components/Gancho";
 import { Legendas } from "./components/Legendas";
 import { fontesProntas } from "./fontes";
 import { clamp, theme } from "./theme";
-import type { Projeto } from "./tipos";
+import { linhaDoTempo, type Projeto } from "./tipos";
 
 // Quanto de P&B aplicar neste frame (transição suave de ~6 frames nas bordas).
 const usePretoEBranco = (trechos: [number, number][]) => {
@@ -44,24 +44,44 @@ export const Molde: React.FC<Projeto> = (p) => {
     fontesProntas.then(() => continueRender(handle));
   }, [handle]);
 
-  const cinza = usePretoEBranco(p.pretoEBranco);
+  const frame = useCurrentFrame();
+  const lt = linhaDoTempo(p);
+  const cinza = usePretoEBranco(lt.pretoEBranco);
+  const teaserFrames = Math.round(lt.teaserDur * fps);
   const ganchoFrames = Math.round(p.gancho.duracao * fps);
   const ctaFrames = Math.round(p.cta.duracao * fps);
   const ctaInicio = durationInFrames - ctaFrames;
   // Legendas param quando o CTA entra, para não brigar com ele.
-  const legendas = p.legendas.filter((l) => l.inicio * fps < ctaInicio - 2);
+  const legendas = lt.legendas.filter((l) => l.inicio * fps < ctaInicio - 2);
 
   return (
     <AbsoluteFill style={{ background: theme.colors.preto }}>
-      <OffthreadVideo
-        src={staticFile(`brutos/${p.video}`)}
+      <AbsoluteFill
         style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
+          transform: p.zoomGancho
+            ? `scale(${interpolate(frame, [0, ganchoFrames], [1.0, 1.14], { easing: theme.ease.inOut, ...clamp })})`
+            : undefined,
           filter: `grayscale(${cinza}) contrast(${1 + cinza * 0.12})`,
         }}
-      />
+      >
+        {p.teaser ? (
+          <Sequence durationInFrames={teaserFrames} layout="none">
+            <OffthreadVideo
+              src={staticFile(`brutos/${p.video}`)}
+              trimBefore={Math.round(p.teaser[0] * fps)}
+              trimAfter={Math.round(p.teaser[1] * fps)}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </Sequence>
+        ) : null}
+        <Sequence from={teaserFrames} layout="none">
+          <OffthreadVideo
+            src={staticFile(`brutos/${p.video}`)}
+            trimBefore={Math.round(lt.corte * fps) || undefined}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </Sequence>
+      </AbsoluteFill>
 
       <Sequence durationInFrames={ganchoFrames} layout="none">
         <Gancho linhas={p.gancho.linhas} duracaoFrames={ganchoFrames} />

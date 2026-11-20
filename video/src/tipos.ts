@@ -24,4 +24,29 @@ export type Projeto = {
     duracao: number; // segundos finais do vídeo ocupados pelo CTA
   };
   efeitosSonoros: boolean;
+  // --- Variações de gancho (opcionais) ---
+  cortarInicio?: number; // pula os primeiros N segundos do vídeo bruto
+  teaser?: [number, number]; // trecho do bruto mostrado ANTES do começo (abertura "a frio")
+  zoomGancho?: boolean; // aproxima a imagem devagar durante o gancho
+};
+
+// Duração final e conversão de tempos do bruto para o vídeo editado.
+export const linhaDoTempo = (p: Projeto) => {
+  const corte = p.cortarInicio ?? 0;
+  const teaserDur = p.teaser ? p.teaser[1] - p.teaser[0] : 0;
+  const duracaoFinal = teaserDur + (p.duracao - corte);
+  // tempo no bruto -> tempo no vídeo final (parte principal)
+  const principal = (t: number) => t - corte + teaserDur;
+  const legendas: Legenda[] = [];
+  if (p.teaser) {
+    const [a, b] = p.teaser;
+    for (const l of p.legendas)
+      if (l.inicio >= a && l.fim <= b) legendas.push({ ...l, inicio: l.inicio - a, fim: l.fim - a });
+  }
+  for (const l of p.legendas)
+    if (l.inicio >= corte) legendas.push({ ...l, inicio: principal(l.inicio), fim: principal(l.fim) });
+  const pretoEBranco = p.pretoEBranco
+    .filter(([, b]) => b > corte)
+    .map(([a, b]) => [principal(Math.max(a, corte)), principal(b)] as [number, number]);
+  return { corte, teaserDur, duracaoFinal, legendas, pretoEBranco };
 };

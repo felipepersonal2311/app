@@ -45,6 +45,26 @@ Para ajustar visualmente: `npx remotion studio src/index.ts` (o projeto `exemplo
 
 `duracao` e `fps` são preenchidos pelo `preparar.py`.
 
+## Testar ganchos (várias versões do mesmo vídeo)
+
+Grave um vídeo, prepare o projeto normalmente e descreva as variações num arquivo
+(veja `variacoes/exemplo.json`). Cada versão pode mudar:
+
+- `gancho`: o texto das faixas (pergunta, dor, número, polêmica…)
+- `teaser`: `[inicio, fim]` de um trecho forte mostrado **antes** do começo (abertura "a frio")
+- `cortarInicio`: começa o vídeo N segundos depois (mais direto na ação)
+- `zoomGancho`: aproximação lenta durante o gancho
+- `cta`: outra chamada/palavra no final
+
+```bash
+python3 scripts/variacoes.py projetos/<nome>.json variacoes/<arquivo>.json --renderizar
+# -> out/variacoes/<nome>/<variação>.mp4
+```
+
+Suba cada versão no Instagram como **Reel de teste** (opção na tela de publicação),
+espere 24–72h, compare retenção dos 3 primeiros segundos, % assistido e compartilhamentos,
+e compartilhe a vencedora com seus seguidores. Teste de 3 a 5 versões, não dezenas.
+
 ## Onde mexer no visual
 
 Tudo está em `src/theme.ts`: cores, fontes, inclinação das faixas e animações.

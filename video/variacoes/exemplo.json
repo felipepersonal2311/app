@@ -1,0 +1,24 @@
+{
+  "variacoes": [
+    {
+      "nome": "1-pergunta",
+      "gancho": ["TODO MUNDO", "ERRA A FALHA"]
+    },
+    {
+      "nome": "2-teaser",
+      "gancho": ["OLHA A", "ÚLTIMA REP"],
+      "teaser": [11.2, 13.4],
+      "zoomGancho": true
+    },
+    {
+      "nome": "3-dor",
+      "gancho": ["TREINA PESADO", "E NÃO CRESCE?"],
+      "cortarInicio": 1.0,
+      "zoomGancho": true
+    },
+    {
+      "nome": "4-numero",
+      "gancho": ["1 SINAL QUE", "VOCÊ PAROU CEDO"]
+    }
+  ]
+}
