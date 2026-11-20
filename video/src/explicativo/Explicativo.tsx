@@ -16,6 +16,7 @@ import { fontesProntas } from "../fontes";
 import { clamp, theme } from "../theme";
 import { Calendario, CelularFotos, CopiaECola, Entra, Espelho } from "./Aderecos";
 import { Balao } from "./Balao";
+import { Efeitos } from "./Efeitos";
 import { ELENCO, Expressao, Personagem, Visual } from "./Personagem";
 
 // Roteiro v1 "Amigas conversando" — 30s a 30fps. Tempos em segundos.
@@ -340,6 +341,7 @@ export const Explicativo: React.FC = () => {
         <Mascote />
       </Sequence>
 
+      <Efeitos />
       <Acabamento />
     </AbsoluteFill>
   );
@@ -353,14 +355,14 @@ const Mascote: React.FC = () => {
     <div
       style={{
         position: "absolute",
-        left: 740,
-        top: 1250,
+        left: 770,
+        top: 1320,
         opacity: p,
-        transform: `translateY(${interpolate(p, [0, 1], [300, 0])}px) scale(0.8)`,
+        transform: `translateY(${interpolate(p, [0, 1], [300, 0])}px) scale(0.84)`,
         transformOrigin: "0 0",
       }}
     >
-      <Personagem v={ELENCO.felipe} expressao="feliz" bracoEsq={10} bracoDir={-130} joinhaDir />
+      <Personagem v={ELENCO.felipe} expressao="confiante" bracoEsq={128} bracoDir={-14} apontaEsq />
     </div>
   );
 };
