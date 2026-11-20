@@ -49,7 +49,7 @@ export const CTA: React.FC<{ chamada: string; palavra: string }> = ({ chamada, p
         <Faixa
           texto={`"${palavra.toUpperCase()}"`}
           cor={theme.colors.vermelho}
-          tamanho={190}
+          tamanho={Math.min(190, Math.floor(2100 / (palavra.length + 2)))}
           atraso={11}
           lado={1}
           brilho

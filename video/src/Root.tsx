@@ -1,6 +1,7 @@
 import React from "react";
 import { CalculateMetadataFunction, Composition } from "remotion";
 import exemplo from "../projetos/exemplo.json";
+import { Explicativo } from "./explicativo/Explicativo";
 import { Molde } from "./Molde";
 import type { Projeto } from "./tipos";
 
@@ -11,6 +12,7 @@ const metadados: CalculateMetadataFunction<Projeto> = ({ props }) => ({
 });
 
 export const Root: React.FC = () => (
+  <>
   <Composition
     id="Reel"
     component={Molde}
@@ -21,4 +23,13 @@ export const Root: React.FC = () => (
     defaultProps={exemplo as Projeto}
     calculateMetadata={metadados}
   />
+  <Composition
+    id="Explicativo"
+    component={Explicativo}
+    width={1080}
+    height={1920}
+    fps={30}
+    durationInFrames={900}
+  />
+  </>
 );
