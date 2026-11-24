@@ -46,13 +46,17 @@ export const Molde: React.FC<Projeto> = (p) => {
 
   const frame = useCurrentFrame();
   const lt = linhaDoTempo(p);
+  const rosto = p.layout === "rosto";
   const cinza = usePretoEBranco(lt.pretoEBranco);
   const teaserFrames = Math.round(lt.teaserDur * fps);
   const ganchoFrames = Math.round(p.gancho.duracao * fps);
   const ctaFrames = Math.round(p.cta.duracao * fps);
   const ctaInicio = durationInFrames - ctaFrames;
   // Legendas param quando o CTA entra, para não brigar com ele.
-  const legendas = lt.legendas.filter((l) => l.inicio * fps < ctaInicio - 2);
+  // No layout "rosto" o gancho ocupa a altura das legendas: elas só começam depois dele.
+  const legendas = lt.legendas.filter(
+    (l) => l.inicio * fps < ctaInicio - 2 && (!rosto || l.inicio * fps >= ganchoFrames - 4),
+  );
 
   return (
     <AbsoluteFill style={{ background: theme.colors.preto }}>
@@ -84,10 +88,10 @@ export const Molde: React.FC<Projeto> = (p) => {
       </AbsoluteFill>
 
       <Sequence durationInFrames={ganchoFrames} layout="none">
-        <Gancho linhas={p.gancho.linhas} duracaoFrames={ganchoFrames} />
+        <Gancho linhas={p.gancho.linhas} duracaoFrames={ganchoFrames} topo={rosto ? 1000 : 290} />
       </Sequence>
 
-      <Legendas legendas={legendas} destaques={p.destaques} />
+      <Legendas legendas={legendas} destaques={p.destaques} deslocamento={rosto ? 820 : 260} />
 
       <Sequence from={ctaInicio} layout="none">
         <CTA chamada={p.cta.chamada} palavra={p.cta.palavra} />

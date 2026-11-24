@@ -5,16 +5,17 @@ import { Faixa } from "./Faixa";
 import { Simbolo } from "./Simbolo";
 
 // Abertura: símbolo + 1 ou 2 faixas (azul-marinho e vermelha) no terço superior.
-export const Gancho: React.FC<{ linhas: string[]; duracaoFrames: number }> = ({
+export const Gancho: React.FC<{ linhas: string[]; duracaoFrames: number; topo?: number }> = ({
   linhas,
   duracaoFrames,
+  topo = 290,
 }) => {
   const { fps } = useVideoConfig();
   const saida = duracaoFrames - Math.round(fps / 3);
   const cores = [theme.colors.marinho, theme.colors.vermelho];
   return (
     <AbsoluteFill
-      style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: 290, gap: 44 }}
+      style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: topo, gap: 44 }}
     >
       <Simbolo tamanho={150} atraso={0} saida={saida} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22 }}>

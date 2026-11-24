@@ -28,6 +28,7 @@ export type Projeto = {
   cortarInicio?: number; // pula os primeiros N segundos do vídeo bruto
   teaser?: [number, number]; // trecho do bruto mostrado ANTES do começo (abertura "a frio")
   zoomGancho?: boolean; // aproxima a imagem devagar durante o gancho
+  layout?: "padrao" | "rosto"; // "rosto": vídeo selfie, textos descem para a altura do peito
 };
 
 // Duração final e conversão de tempos do bruto para o vídeo editado.

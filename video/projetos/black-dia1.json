@@ -1,0 +1,170 @@
+{
+  "video": "black-dia1.mp4",
+  "duracao": 29.703,
+  "fps": 30,
+  "gancho": {
+    "linhas": [
+      "BLACK FRIDAY",
+      "DESCONTO ESPECIAL"
+    ],
+    "duracao": 2.8
+  },
+  "legendas": [
+    {
+      "texto": "Pessoal",
+      "inicio": 0.08,
+      "fim": 0.86
+    },
+    {
+      "texto": "eu decidi de",
+      "inicio": 0.86,
+      "fim": 1.34
+    },
+    {
+      "texto": "última hora focar",
+      "inicio": 1.34,
+      "fim": 1.98
+    },
+    {
+      "texto": "na Black Friday",
+      "inicio": 1.98,
+      "fim": 3.12
+    },
+    {
+      "texto": "então esse ano",
+      "inicio": 3.12,
+      "fim": 4.07
+    },
+    {
+      "texto": "tem um desconto",
+      "inicio": 4.07,
+      "fim": 4.55
+    },
+    {
+      "texto": "especial pra vocês",
+      "inicio": 4.55,
+      "fim": 5.77
+    },
+    {
+      "texto": "e quem responder",
+      "inicio": 5.77,
+      "fim": 7.67
+    },
+    {
+      "texto": "a enquete no",
+      "inicio": 7.67,
+      "fim": 8.95
+    },
+    {
+      "texto": "story anterior aqui",
+      "inicio": 8.95,
+      "fim": 10.05
+    },
+    {
+      "texto": "agora",
+      "inicio": 10.05,
+      "fim": 10.69
+    },
+    {
+      "texto": "vai receber a",
+      "inicio": 10.69,
+      "fim": 13.44
+    },
+    {
+      "texto": "oferta promocional na",
+      "inicio": 13.44,
+      "fim": 15.75
+    },
+    {
+      "texto": "quinta-feira vai receber",
+      "inicio": 15.75,
+      "fim": 17.07
+    },
+    {
+      "texto": "a oferta antes",
+      "inicio": 17.07,
+      "fim": 18.35
+    },
+    {
+      "texto": "de todo mundo",
+      "inicio": 18.35,
+      "fim": 18.99
+    },
+    {
+      "texto": "e isso adiantando",
+      "inicio": 18.99,
+      "fim": 21.09
+    },
+    {
+      "texto": "são vagas limitadas",
+      "inicio": 21.09,
+      "fim": 21.91
+    },
+    {
+      "texto": "tá?",
+      "inicio": 21.91,
+      "fim": 22.09
+    },
+    {
+      "texto": "Então não é",
+      "inicio": 22.09,
+      "fim": 23.28
+    },
+    {
+      "texto": "ilimitado até porque",
+      "inicio": 23.28,
+      "fim": 24.42
+    },
+    {
+      "texto": "eu faço os",
+      "inicio": 24.42,
+      "fim": 25.32
+    },
+    {
+      "texto": "planejamentos um a",
+      "inicio": 25.32,
+      "fim": 26.62
+    },
+    {
+      "texto": "um",
+      "inicio": 26.62,
+      "fim": 26.89
+    },
+    {
+      "texto": "faço os planejamentos",
+      "inicio": 26.89,
+      "fim": 28.11
+    },
+    {
+      "texto": "individuais",
+      "inicio": 28.11,
+      "fim": 29.07
+    },
+    {
+      "texto": "realmente",
+      "inicio": 29.07,
+      "fim": 29.71
+    }
+  ],
+  "destaques": [
+    "desconto",
+    "enquete",
+    "quinta-feira",
+    "antes",
+    "limitadas",
+    "individuais"
+  ],
+  "pretoEBranco": [
+    [
+      21.09,
+      22.09
+    ]
+  ],
+  "cta": {
+    "chamada": "RESPONDA A",
+    "palavra": "ENQUETE",
+    "duracao": 2.6
+  },
+  "efeitosSonoros": true,
+  "layout": "rosto"
+}

@@ -84,9 +84,10 @@ const Bloco: React.FC<{ texto: string; destaques: Set<string>; duracao: number }
 };
 
 // Legendas no centro da tela (um pouco abaixo do meio), como na referência.
-export const Legendas: React.FC<{ legendas: Legenda[]; destaques: string[] }> = ({
+export const Legendas: React.FC<{ legendas: Legenda[]; destaques: string[]; deslocamento?: number }> = ({
   legendas,
   destaques,
+  deslocamento = 260,
 }) => {
   const { fps } = useVideoConfig();
   const set = new Set(destaques.map(normalizar));
@@ -98,7 +99,7 @@ export const Legendas: React.FC<{ legendas: Legenda[]; destaques: string[] }> = 
         return (
           <Sequence key={i} from={de} durationInFrames={dur} layout="none">
             <AbsoluteFill
-              style={{ alignItems: "center", justifyContent: "center", paddingTop: 260 }}
+              style={{ alignItems: "center", justifyContent: "center", paddingTop: deslocamento }}
             >
               <Bloco texto={l.texto} destaques={set} duracao={dur} />
             </AbsoluteFill>
