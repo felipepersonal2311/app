@@ -1,0 +1,20 @@
+{
+  "video": "cafe-energetico.mp4",
+  "duracao": 5,
+  "velocidade": 0.4,
+  "linhas": [
+    {
+      "texto": "Falam que *ENERGÉTICO FAZ MAL*…",
+      "tamanho": 60
+    },
+    {
+      "texto": "mas tomam *5 XÍCARAS DE CAFÉ* por dia",
+      "tamanho": 60
+    },
+    {
+      "texto": "(*~475 mg* de cafeína vs *~154 mg* numa lata)",
+      "tamanho": 38
+    }
+  ],
+  "rodape": "LEIA A LEGENDA"
+}

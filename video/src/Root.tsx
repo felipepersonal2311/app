@@ -3,6 +3,8 @@ import { CalculateMetadataFunction, Composition } from "remotion";
 import exemplo from "../projetos/exemplo.json";
 import { Explicativo } from "./explicativo/Explicativo";
 import { T } from "./explicativo/roteiro";
+import cafe from "../projetos/cafe-energetico.json";
+import { TextoSobreVideo, type TextoSobreVideoProps } from "./texto/TextoSobreVideo";
 import { Molde } from "./Molde";
 import { linhaDoTempo, type Projeto } from "./tipos";
 
@@ -31,6 +33,16 @@ export const Root: React.FC = () => (
     height={1920}
     fps={30}
     durationInFrames={Math.ceil(T.fim * 30)}
+  />
+  <Composition
+    id="TextoSobreVideo"
+    component={TextoSobreVideo}
+    width={1080}
+    height={1920}
+    fps={30}
+    durationInFrames={150}
+    defaultProps={cafe as TextoSobreVideoProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * 30) })}
   />
   </>
 );
