@@ -12,8 +12,8 @@
     { "texto": "por dia", "estilo": "pequena" }
   ],
   "comparacao": [
-    { "valor": "~475 mg", "rotulo": "de cafeína (5 cafés)" },
-    { "valor": "~154 mg", "rotulo": "numa lata" }
+    { "valor": "475 mg", "rotulo": "de cafeína (5 cafés)" },
+    { "valor": "154 mg", "rotulo": "numa lata" }
   ],
   "rodape": "LEIA A LEGENDA"
 }
