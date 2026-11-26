@@ -1,0 +1,9 @@
+{
+  "fundo": "react-falha-fundo.mp4",
+  "foto": "react-falha-foto.png",
+  "duracao": 28.6,
+  "divisao": 960,
+  "videoY": 780,
+  "foto_": { "largura": 923, "altura": 2000, "y": 540 },
+  "gancho": "Se sua última rep é *igual à primeira*, você está *treinando errado*."
+}

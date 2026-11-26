@@ -7,6 +7,8 @@ import cafe from "../projetos/cafe-energetico.json";
 import treinoMes from "../projetos/treino-todo-mes.json";
 import reactFalha from "../projetos/react-falha.json";
 import { ReactVideo, type ReactProps } from "./react/React";
+import reactFoto from "../projetos/react-falha-foto.json";
+import { ReactFoto, type ReactFotoProps } from "./react/ReactFoto";
 import { Educativo, type EducativoProps } from "./educativo/Educativo";
 import { TextoSobreVideo, type TextoSobreVideoProps } from "./texto/TextoSobreVideo";
 import { Molde } from "./Molde";
@@ -66,6 +68,16 @@ export const Root: React.FC = () => (
     fps={30}
     durationInFrames={300}
     defaultProps={reactFalha as ReactProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * 30) })}
+  />
+  <Composition
+    id="ReactFoto"
+    component={ReactFoto}
+    width={1080}
+    height={1920}
+    fps={30}
+    durationInFrames={300}
+    defaultProps={reactFoto as ReactFotoProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * 30) })}
   />
   </>
