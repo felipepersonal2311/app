@@ -1,0 +1,28 @@
+{
+  "fundo": "react-falha-fundo.mp4",
+  "cam": "react-falha-cam.mp4",
+  "duracao": 28.6,
+  "camVolume": 0,
+  "gancho": {
+    "texto": "Se sua última rep é *igual à primeira*, você está *treinando errado*.",
+    "duracao": 4.5,
+    "top": 560
+  },
+  "janela": {
+    "x": 40,
+    "y": 1130,
+    "largura": 340,
+    "altura": 440
+  },
+  "recorte": {
+    "x": 0,
+    "y": 360,
+    "largura": 780,
+    "camLargura": 1080,
+    "camAltura": 1920
+  },
+  "zoomFundo": [
+    22.5,
+    28.6
+  ]
+}

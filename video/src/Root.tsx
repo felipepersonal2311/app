@@ -5,6 +5,8 @@ import { Explicativo } from "./explicativo/Explicativo";
 import { T } from "./explicativo/roteiro";
 import cafe from "../projetos/cafe-energetico.json";
 import treinoMes from "../projetos/treino-todo-mes.json";
+import reactFalha from "../projetos/react-falha.json";
+import { ReactVideo, type ReactProps } from "./react/React";
 import { Educativo, type EducativoProps } from "./educativo/Educativo";
 import { TextoSobreVideo, type TextoSobreVideoProps } from "./texto/TextoSobreVideo";
 import { Molde } from "./Molde";
@@ -55,6 +57,16 @@ export const Root: React.FC = () => (
     durationInFrames={300}
     defaultProps={treinoMes as EducativoProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * props.fps), fps: props.fps })}
+  />
+  <Composition
+    id="React"
+    component={ReactVideo}
+    width={1080}
+    height={1920}
+    fps={30}
+    durationInFrames={300}
+    defaultProps={reactFalha as ReactProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * 30) })}
   />
   </>
 );
