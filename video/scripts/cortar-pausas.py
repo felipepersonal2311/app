@@ -38,6 +38,8 @@ def main() -> None:
     fim = [float(x) for x in re.findall(r"silence_end: ([0-9.]+)", log)]
     duracao = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", video],
                                    capture_output=True, text=True).stdout)
+    larg, alt = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                                "-of", "csv=p=0", video], capture_output=True, text=True).stdout.strip().split(",")
     fala_ini = max(0.0, palavras[0]["i"] - FOLGA)
     fala_fim = min(duracao, palavras[-1]["f"] + 0.25)
     trechos, cursor_t = [], fala_ini
@@ -62,7 +64,7 @@ def main() -> None:
         v = f"[0:v]trim={t['i']}:{t['f']},setpts=PTS-STARTPTS"
         if zoom and k % 2 == 1:
             v += f",crop=iw/{ZOOM}:ih/{ZOOM}:(iw-iw/{ZOOM})/2:(ih-ih/{ZOOM})*0.35,scale=iw*{ZOOM}:ih*{ZOOM}"
-        v += ",scale=720:1280,setsar=1"
+        v += f",scale={larg}:{alt},setsar=1"
         partes.append(f"{v}[v{k}];[0:a]atrim={t['i']}:{t['f']},asetpts=PTS-STARTPTS[a{k}]")
         for w in t["palavras"]:
             a = min(max(w["i"], t["i"]), t["f"] - 0.05)

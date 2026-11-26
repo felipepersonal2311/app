@@ -23,7 +23,8 @@ RAIZ = Path(__file__).resolve().parent.parent
 
 FILTRO_HDR = (
     "zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,"
-    "zscale=t=bt709:m=bt709:r=tv,format=yuv420p,eq=contrast=1.05:saturation=1.05,unsharp=5:5:0.35"
+    "zscale=t=bt709:m=bt709:r=tv,format=yuv420p,hqdn3d=1.5:1.5:3:3,"
+    "curves=all='0/0 0.25/0.20 0.5/0.52 0.75/0.82 1/1',eq=saturation=1.12:gamma=1.04,unsharp=5:5:0.6"
 )
 
 

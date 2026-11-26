@@ -1,361 +1,361 @@
 {
-  "video": "treino-todo-mes.mp4",
-  "duracao": 54.52,
+  "video": "treino-todo-mes-cortado.mp4",
+  "duracao": 49.77,
   "fps": 30,
   "gancho": {
-    "texto": "Trocar o treino *todo mês* dá mais resultado?",
-    "duracao": 5.2
+    "texto": "Você treina e seu corpo *não muda*?",
+    "duracao": 5.0
   },
   "legendas": [
     {
       "texto": "Na hora de",
       "inicio": 0.0,
-      "fim": 0.54
+      "fim": 0.36
     },
     {
       "texto": "montar um treino",
-      "inicio": 0.54,
-      "fim": 1.3
+      "inicio": 0.36,
+      "fim": 1.12
     },
     {
       "texto": "a gente precisa",
-      "inicio": 1.3,
-      "fim": 1.62
+      "inicio": 1.12,
+      "fim": 1.44
     },
     {
       "texto": "saber qual o",
-      "inicio": 1.62,
-      "fim": 2.24
+      "inicio": 1.44,
+      "fim": 2.06
     },
     {
       "texto": "nível de treinamento",
-      "inicio": 2.24,
-      "fim": 2.88
+      "inicio": 2.06,
+      "fim": 2.7
     },
     {
       "texto": "que a pessoa",
-      "inicio": 2.88,
-      "fim": 3.26
+      "inicio": 2.7,
+      "fim": 3.08
     },
     {
       "texto": "está",
-      "inicio": 3.26,
-      "fim": 3.86
+      "inicio": 3.08,
+      "fim": 3.55
     },
     {
       "texto": "Se você é",
-      "inicio": 3.86,
-      "fim": 4.84
+      "inicio": 3.55,
+      "fim": 4.53
     },
     {
       "texto": "iniciante e a",
-      "inicio": 4.84,
-      "fim": 5.32
+      "inicio": 4.53,
+      "fim": 5.01
     },
     {
       "texto": "gente coloca uma",
-      "inicio": 5.32,
-      "fim": 6.8
+      "inicio": 5.01,
+      "fim": 6.49
     },
     {
       "texto": "quantidade a mais",
-      "inicio": 6.8,
-      "fim": 7.64
+      "inicio": 6.49,
+      "fim": 7.33
     },
     {
       "texto": "de exercício",
-      "inicio": 7.64,
-      "fim": 8.78
+      "inicio": 7.33,
+      "fim": 8.24
     },
     {
       "texto": "isso pode gerar",
-      "inicio": 8.78,
-      "fim": 9.24
+      "inicio": 8.24,
+      "fim": 8.7
     },
     {
       "texto": "um acúmulo de",
-      "inicio": 9.24,
-      "fim": 9.8
+      "inicio": 8.7,
+      "fim": 9.26
     },
     {
       "texto": "fadiga",
-      "inicio": 9.8,
-      "fim": 10.46
+      "inicio": 9.26,
+      "fim": 9.74
     },
     {
       "texto": "E não só",
-      "inicio": 10.46,
-      "fim": 11.16
+      "inicio": 9.74,
+      "fim": 10.44
     },
     {
       "texto": "fazer você perder",
-      "inicio": 11.16,
-      "fim": 11.84
+      "inicio": 10.44,
+      "fim": 11.12
     },
     {
       "texto": "força e músculo",
-      "inicio": 11.84,
-      "fim": 12.82
+      "inicio": 11.12,
+      "fim": 12.1
     },
     {
       "texto": "mas também fazer",
-      "inicio": 12.82,
-      "fim": 13.86
+      "inicio": 12.1,
+      "fim": 13.14
     },
     {
       "texto": "você ficar mais",
-      "inicio": 13.86,
-      "fim": 15.32
+      "inicio": 13.14,
+      "fim": 14.41
     },
     {
       "texto": "próximo de uma",
-      "inicio": 15.32,
-      "fim": 15.82
+      "inicio": 14.41,
+      "fim": 14.91
     },
     {
       "texto": "lesão",
-      "inicio": 15.82,
-      "fim": 16.6
+      "inicio": 14.91,
+      "fim": 15.27
     },
     {
       "texto": "Mas aí",
-      "inicio": 16.6,
-      "fim": 17.02
+      "inicio": 15.27,
+      "fim": 15.69
     },
     {
       "texto": "você acertou no",
-      "inicio": 17.02,
-      "fim": 17.9
+      "inicio": 15.69,
+      "fim": 16.57
     },
     {
       "texto": "treino",
-      "inicio": 17.9,
-      "fim": 18.32
+      "inicio": 16.57,
+      "fim": 16.99
     },
     {
       "texto": "Quando mudar de",
-      "inicio": 18.32,
-      "fim": 19.02
+      "inicio": 16.99,
+      "fim": 17.69
     },
     {
       "texto": "treino?",
-      "inicio": 19.02,
-      "fim": 19.62
+      "inicio": 17.69,
+      "fim": 18.05
     },
     {
       "texto": "Será que é",
-      "inicio": 19.62,
-      "fim": 19.92
+      "inicio": 18.05,
+      "fim": 18.35
     },
     {
       "texto": "mais interessante mudar",
-      "inicio": 19.92,
-      "fim": 20.8
+      "inicio": 18.35,
+      "fim": 19.23
     },
     {
       "texto": "de treino ou",
-      "inicio": 20.8,
-      "fim": 21.3
+      "inicio": 19.23,
+      "fim": 19.73
     },
     {
       "texto": "fazer alguns ajustes?",
-      "inicio": 21.3,
-      "fim": 22.3
+      "inicio": 19.73,
+      "fim": 20.73
     },
     {
       "texto": "Mas que tipo",
-      "inicio": 22.3,
-      "fim": 22.8
+      "inicio": 20.73,
+      "fim": 21.23
     },
     {
       "texto": "de ajuste?",
-      "inicio": 22.8,
-      "fim": 23.78
+      "inicio": 21.23,
+      "fim": 21.96
     },
     {
       "texto": "Aumentar a repetição?",
-      "inicio": 23.78,
-      "fim": 25.24
+      "inicio": 21.96,
+      "fim": 23.03
     },
     {
       "texto": "Ajuste na carga?",
-      "inicio": 25.32,
-      "fim": 26.7
+      "inicio": 23.03,
+      "fim": 24.12
     },
     {
       "texto": "Ou incluir métodos",
-      "inicio": 26.7,
-      "fim": 27.5
+      "inicio": 24.12,
+      "fim": 24.92
     },
     {
       "texto": "de treino?",
-      "inicio": 27.5,
-      "fim": 28.0
+      "inicio": 24.92,
+      "fim": 25.44
     },
     {
       "texto": "O que é",
-      "inicio": 28.0,
-      "fim": 28.62
+      "inicio": 25.44,
+      "fim": 25.92
     },
     {
       "texto": "mais importante?",
-      "inicio": 28.62,
-      "fim": 29.44
+      "inicio": 25.92,
+      "fim": 26.74
     },
     {
       "texto": "O que é",
-      "inicio": 29.44,
-      "fim": 29.58
+      "inicio": 26.74,
+      "fim": 26.88
     },
     {
       "texto": "mais interessante?",
-      "inicio": 29.58,
-      "fim": 30.48
+      "inicio": 26.88,
+      "fim": 27.6
     },
     {
       "texto": "A literatura fala",
-      "inicio": 30.48,
-      "fim": 31.5
+      "inicio": 27.6,
+      "fim": 28.62
     },
     {
       "texto": "sobre o volume",
-      "inicio": 31.5,
-      "fim": 32.08
+      "inicio": 28.62,
+      "fim": 29.2
     },
     {
       "texto": "de treino ideal",
-      "inicio": 32.08,
-      "fim": 33.42
+      "inicio": 29.2,
+      "fim": 30.27
     },
     {
       "texto": "E aí eu",
-      "inicio": 33.52,
-      "fim": 33.72
+      "inicio": 30.27,
+      "fim": 30.47
     },
     {
       "texto": "te pergunto",
-      "inicio": 33.72,
-      "fim": 34.3
+      "inicio": 30.47,
+      "fim": 31.05
     },
     {
       "texto": "você sabe quantas",
-      "inicio": 34.3,
-      "fim": 34.94
+      "inicio": 31.05,
+      "fim": 31.69
     },
     {
       "texto": "séries por grupo",
-      "inicio": 34.94,
-      "fim": 35.62
+      "inicio": 31.69,
+      "fim": 32.37
     },
     {
       "texto": "muscular por semana",
-      "inicio": 35.62,
-      "fim": 36.52
+      "inicio": 32.37,
+      "fim": 33.27
     },
     {
       "texto": "você faz?",
-      "inicio": 36.52,
-      "fim": 37.68
+      "inicio": 33.27,
+      "fim": 34.12
     },
     {
       "texto": "Isso e muito",
-      "inicio": 37.74,
-      "fim": 38.22
+      "inicio": 34.12,
+      "fim": 34.6
     },
     {
       "texto": "mais",
-      "inicio": 38.22,
-      "fim": 38.48
+      "inicio": 34.6,
+      "fim": 34.86
     },
     {
       "texto": "eu entrego dentro",
-      "inicio": 38.48,
-      "fim": 39.08
+      "inicio": 34.86,
+      "fim": 35.46
     },
     {
       "texto": "da minha consultoria",
-      "inicio": 39.08,
-      "fim": 40.38
+      "inicio": 35.46,
+      "fim": 36.63
     },
     {
       "texto": "Check-in semanal",
-      "inicio": 40.38,
-      "fim": 42.12
+      "inicio": 36.63,
+      "fim": 37.98
     },
     {
       "texto": "anamnese mensal",
-      "inicio": 42.12,
-      "fim": 43.2
+      "inicio": 37.98,
+      "fim": 39.06
     },
     {
       "texto": "anamnese de entrada",
-      "inicio": 43.2,
-      "fim": 44.38
+      "inicio": 39.06,
+      "fim": 40.24
     },
     {
       "texto": "avaliação postural nas",
-      "inicio": 44.38,
-      "fim": 45.56
+      "inicio": 40.24,
+      "fim": 41.42
     },
     {
       "texto": "fotos que você",
-      "inicio": 45.56,
-      "fim": 46.26
+      "inicio": 41.42,
+      "fim": 42.12
     },
     {
       "texto": "envia",
-      "inicio": 46.26,
-      "fim": 47.14
+      "inicio": 42.12,
+      "fim": 42.64
     },
     {
       "texto": "E fica de",
-      "inicio": 47.14,
-      "fim": 47.58
+      "inicio": 42.64,
+      "fim": 43.08
     },
     {
       "texto": "olho",
-      "inicio": 47.58,
-      "fim": 47.8
+      "inicio": 43.08,
+      "fim": 43.3
     },
     {
       "texto": "porque sexta-feira tem",
-      "inicio": 47.8,
-      "fim": 48.6
+      "inicio": 43.3,
+      "fim": 44.1
     },
     {
       "texto": "uma condição especial",
-      "inicio": 48.6,
-      "fim": 49.58
+      "inicio": 44.1,
+      "fim": 45.08
     },
     {
       "texto": "que eu nunca",
-      "inicio": 49.58,
-      "fim": 50.04
+      "inicio": 45.08,
+      "fim": 45.54
     },
     {
       "texto": "fiz na vida",
-      "inicio": 50.04,
-      "fim": 50.88
+      "inicio": 45.54,
+      "fim": 46.38
     },
     {
       "texto": "para a consultoria",
-      "inicio": 50.88,
-      "fim": 52.32
+      "inicio": 46.38,
+      "fim": 47.62
     },
     {
       "texto": "É a black",
-      "inicio": 52.32,
-      "fim": 52.98
+      "inicio": 47.62,
+      "fim": 48.27
     },
     {
       "texto": "da consultoria Felipe",
-      "inicio": 52.98,
-      "fim": 54.1
+      "inicio": 48.27,
+      "fim": 49.22
     },
     {
       "texto": "Oliveira",
-      "inicio": 54.1,
-      "fim": 54.72
+      "inicio": 49.22,
+      "fim": 49.84
     }
   ],
   "destaques": [
