@@ -21,6 +21,20 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 
+FILTRO_HDR = (
+    "zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,"
+    "zscale=t=bt709:m=bt709:r=tv,format=yuv420p,eq=contrast=1.05:saturation=1.05,unsharp=5:5:0.35"
+)
+
+
+def eh_hdr(video: Path) -> bool:
+    trc = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=color_transfer",
+         "-of", "csv=p=0", str(video)], capture_output=True, text=True,
+    ).stdout.strip()
+    return trc in ("arib-std-b67", "smpte2084")
+
+
 def sondar(video: Path) -> tuple[float, int]:
     saida = subprocess.run(
         [
@@ -46,7 +60,19 @@ def main() -> None:
     destino = RAIZ / "public" / "brutos" / f"{nome}.mp4"
     destino.parent.mkdir(parents=True, exist_ok=True)
     if origem != destino:
-        shutil.copyfile(origem, destino)
+        if eh_hdr(origem):
+            # iPhone grava em HDR (HLG): converte para SDR com tom de pele natural,
+            # leve ganho de contraste/saturação e nitidez. Sem isso a pele fica "lavada".
+            print("vídeo HDR detectado: convertendo para SDR...")
+            subprocess.run(
+                ["ffmpeg", "-v", "error", "-y", "-i", str(origem), "-vf", FILTRO_HDR, "-r", "30",
+                 "-c:v", "libx264", "-crf", "12", "-preset", "slow",
+                 "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
+                 "-c:a", "aac", "-b:a", "192k", str(destino)],
+                check=True,
+            )
+        else:
+            shutil.copyfile(origem, destino)
 
     duracao, fps = sondar(destino)
     projeto_path = RAIZ / "projetos" / f"{nome}.json"
