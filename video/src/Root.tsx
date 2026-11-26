@@ -4,6 +4,8 @@ import exemplo from "../projetos/exemplo.json";
 import { Explicativo } from "./explicativo/Explicativo";
 import { T } from "./explicativo/roteiro";
 import cafe from "../projetos/cafe-energetico.json";
+import treinoMes from "../projetos/treino-todo-mes.json";
+import { Educativo, type EducativoProps } from "./educativo/Educativo";
 import { TextoSobreVideo, type TextoSobreVideoProps } from "./texto/TextoSobreVideo";
 import { Molde } from "./Molde";
 import { linhaDoTempo, type Projeto } from "./tipos";
@@ -43,6 +45,16 @@ export const Root: React.FC = () => (
     durationInFrames={150}
     defaultProps={cafe as TextoSobreVideoProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * 30) })}
+  />
+  <Composition
+    id="Educativo"
+    component={Educativo}
+    width={1080}
+    height={1920}
+    fps={30}
+    durationInFrames={300}
+    defaultProps={treinoMes as EducativoProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.round(props.duracao * props.fps), fps: props.fps })}
   />
   </>
 );
