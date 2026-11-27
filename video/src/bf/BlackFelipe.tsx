@@ -23,8 +23,8 @@ import dur from "./vozes.json";
 type Quem = "ana" | "bia" | "carol" | "felipe";
 const GAP = 0.3;
 const roteiro: { id: keyof typeof dur; quem: Quem; texto: string; antes?: number }[] = [
-  { id: "ana_1", quem: "ana", texto: "Queria tanto começar uma consultoria… mas tenho *medo de não me adaptar*.", antes: 0.5 },
-  { id: "bia_1", quem: "bia", texto: "A hora é agora! Começou a *Black do Felipe*: 1º mês por *R$ 100*!", antes: 0.4 },
+  { id: "ana_1", quem: "ana", texto: "Gente, eu já tentei de tudo pra *emagrecer*… e *não consigo*.", antes: 0.5 },
+  { id: "bia_1", quem: "bia", texto: "Amiga, experimenta a *consultoria do Felipe*! Começou a Black: 1º mês por *R$ 100*!", antes: 0.4 },
   { id: "carol_1", quem: "carol", texto: "E não é só treino: é uma *comunidade* de gente que *alcança o objetivo*.", antes: 0.6 },
   { id: "bia_2", quem: "bia", texto: "Ele se *preocupa de verdade* com você. É a *melhor consultoria da região*!" },
   { id: "ana_2", quem: "ana", texto: "E se eu quiser *ficar mais tempo*?" },
@@ -44,7 +44,7 @@ const T = {
   gancho: 3.0,
   biaEntra: F.bia_1.inicio - 0.5,
   carolEntra: F.carol_1.inicio - 0.5,
-  oferta: F.bia_1.inicio + 2.2,
+  oferta: F.bia_1.inicio + 3.0,
   comunidade: F.carol_1.inicio + 0.3,
   cuidado: F.bia_2.inicio,
   semestral: F.carol_2.inicio + 0.9,
