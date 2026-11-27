@@ -23,6 +23,8 @@ export type Visual = {
   corrente?: boolean;
   relogio?: string; // cor do relógio (pulso direito)
   sobrancelhaGrossa?: boolean;
+  shorts?: string; // cor do friso do short (pernas de fora)
+  mechas?: string; // cor das luzes no cabelo longo
 };
 
 const Braco: React.FC<{
@@ -72,7 +74,18 @@ const Boca: React.FC<{ e: Expressao; clara?: boolean }> = ({ e, clara }) => {
 
 const CabeloAtras: React.FC<{ v: Visual }> = ({ v }) => {
   if (v.estiloCabelo === "longo")
-    return <path d="M 78 100 Q 70 260 92 300 L 208 300 Q 230 260 222 100 Z" fill={v.cabelo} />;
+    return (
+      <g>
+        <path d="M 74 100 Q 62 280 90 330 L 210 330 Q 238 280 226 100 Z" fill={v.cabelo} />
+        {v.mechas ? (
+          <g stroke={v.mechas} strokeWidth={9} strokeLinecap="round" fill="none" opacity={0.85}>
+            <path d="M 84 150 Q 78 240 96 318" />
+            <path d="M 216 150 Q 222 240 204 318" />
+            <path d="M 100 200 Q 96 260 108 322" />
+          </g>
+        ) : null}
+      </g>
+    );
   if (v.estiloCabelo === "rabo")
     return <ellipse cx={232} cy={140} rx={30} ry={70} fill={v.cabelo} transform="rotate(18 232 140)" />;
   if (v.estiloCabelo === "coque") return <circle cx={150} cy={22} r={36} fill={v.cabelo} />;
@@ -116,8 +129,19 @@ export const Personagem: React.FC<{
       <ellipse cx={150} cy={688} rx={110 + ombro} ry={14} fill="rgba(36,48,94,0.18)" />
       <CabeloAtras v={v} />
       {/* pernas */}
-      <rect x={100} y={420} width={46} height={240} rx={22} fill={v.calca} />
-      <rect x={154} y={420} width={46} height={240} rx={22} fill={v.calca} />
+      {v.shorts ? (
+        <>
+          <rect x={102} y={430} width={42} height={230} rx={20} fill={v.pele} />
+          <rect x={156} y={430} width={42} height={230} rx={20} fill={v.pele} />
+          <path d="M 94 420 L 206 420 L 212 512 L 154 512 L 150 478 L 146 512 L 88 512 Z" fill={v.calca} />
+          <path d="M 88 504 L 146 504 M 154 504 L 212 504" stroke={v.shorts} strokeWidth={6} strokeLinecap="round" />
+        </>
+      ) : (
+        <>
+          <rect x={100} y={420} width={46} height={240} rx={22} fill={v.calca} />
+          <rect x={154} y={420} width={46} height={240} rx={22} fill={v.calca} />
+        </>
+      )}
       <rect x={88} y={648} width={64} height={30} rx={14} fill={v.tenis} />
       <rect x={148} y={648} width={64} height={30} rx={14} fill={v.tenis} />
       {/* braços atrás do tronco */}

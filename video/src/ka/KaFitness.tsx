@@ -17,7 +17,7 @@ import { clamp, theme } from "../theme";
 
 // Promo Black Friday — Ká Fitness (loja parceira). Identidade: bege, marrom e dourado,
 // serifada elegante. Movimento 3D com perspectiva CSS (carrossel, cartões virando).
-const C = {
+export const C = {
   creme: "#F6E6D6",
   bege: "#E9CDB3",
   marrom: "#4A230F",
@@ -25,10 +25,10 @@ const C = {
   ouro: "#C9974F",
   ouroClaro: "#EBC47E",
 };
-const SERIF = "Playfair Display";
-const SANS = "Montserrat";
+export const SERIF = "Playfair Display";
+export const SANS = "Montserrat";
 
-const fontes = Promise.all([
+export const fontes = Promise.all([
   loadFont({ family: SERIF, url: staticFile("fonts/Playfair-700.woff"), weight: "700" }),
   loadFont({ family: SERIF, url: staticFile("fonts/Playfair-700i.woff"), weight: "700", style: "italic" }),
   loadFont({ family: SANS, url: staticFile("fonts/Montserrat-800.woff"), weight: "800" }),
@@ -47,7 +47,7 @@ const SONS: [number, string, number][] = [
   [446, "whoosh", 0.35], [456, "thump", 0.4], [466, "brilho", 0.3],
 ];
 
-const ouroTexto: React.CSSProperties = {
+export const ouroTexto: React.CSSProperties = {
   background: `linear-gradient(180deg, ${C.ouroClaro} 0%, ${C.ouro} 55%, #9C6B2E 100%)`,
   WebkitBackgroundClip: "text",
   backgroundClip: "text",

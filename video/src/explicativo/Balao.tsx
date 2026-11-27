@@ -13,7 +13,8 @@ export const Balao: React.FC<{
   de: number; // frame de entrada (relativo à Sequence)
   ate?: number; // frame de saída
   cor?: string; // cor da borda (identifica quem fala)
-}> = ({ texto, x, y, largura, ponta, de, ate, cor = theme.colors.marinho }) => {
+  corDestaque?: string; // cor dos trechos entre *asteriscos*
+}> = ({ texto, x, y, largura, ponta, de, ate, cor = theme.colors.marinho, corDestaque = theme.colors.vermelho }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = spring({ frame: frame - de, fps, config: theme.spring.snappy });
@@ -53,7 +54,7 @@ export const Balao: React.FC<{
         }}
       >
         {partes.map((t, i) => (
-          <span key={i} style={{ color: i % 2 ? theme.colors.vermelho : undefined }}>
+          <span key={i} style={{ color: i % 2 ? corDestaque : undefined }}>
             {t}
           </span>
         ))}
