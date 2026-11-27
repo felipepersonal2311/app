@@ -11,6 +11,7 @@ import reactFoto from "../projetos/react-falha-foto.json";
 import { ReactFoto, type ReactFotoProps } from "./react/ReactFoto";
 import { KA_DURACAO, KaFitness } from "./ka/KaFitness";
 import { KA_DIALOGO_DURACAO, KaDialogo } from "./ka/KaDialogo";
+import { BF_DURACAO, BlackFelipe } from "./bf/BlackFelipe";
 import { Educativo, type EducativoProps } from "./educativo/Educativo";
 import { TextoSobreVideo, type TextoSobreVideoProps } from "./texto/TextoSobreVideo";
 import { Molde } from "./Molde";
@@ -84,5 +85,6 @@ export const Root: React.FC = () => (
   />
   <Composition id="KaFitness" component={KaFitness} width={1080} height={1920} fps={30} durationInFrames={KA_DURACAO} />
   <Composition id="KaDialogo" component={KaDialogo} width={1080} height={1920} fps={30} durationInFrames={KA_DIALOGO_DURACAO} />
+  <Composition id="BlackFelipe" component={BlackFelipe} width={1080} height={1920} fps={30} durationInFrames={BF_DURACAO} />
   </>
 );
