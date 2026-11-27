@@ -23,8 +23,8 @@ import dur from "./vozes.json";
 type Quem = "ana" | "bia" | "carol" | "felipe";
 const GAP = 0.3;
 const roteiro: { id: keyof typeof dur; quem: Quem; texto: string; antes?: number }[] = [
-  { id: "ana_1", quem: "ana", texto: "Já tentei de tudo! *Passo horas na academia*, treino, treino… e *não evoluo*.", antes: 0.5 },
-  { id: "bia_1", quem: "bia", texto: "Amiga, experimenta a *consultoria do Felipe*! Começou a Black: 1º mês por *R$ 100*!", antes: 0.4 },
+  { id: "ana_1", quem: "ana", texto: "Gente, *passo horas na academia*, treino, treino… e *não evoluo*!", antes: 0.3 },
+  { id: "bia_1", quem: "bia", texto: "Amiga, experimenta a *consultoria do Felipe*! Começou a Black: 1º mês por *R$ 100*!", antes: 0.2 },
   { id: "carol_0", quem: "carol", texto: "E sabia que lá o treino *não passa de 40 a 50 minutos*?", antes: 0.6 },
   { id: "carol_1", quem: "carol", texto: "E não é só treino: é uma *comunidade* de gente que *alcança o objetivo*." },
   { id: "bia_2", quem: "bia", texto: "Ele se *preocupa de verdade* com você. É a *melhor consultoria da região*!" },
@@ -42,7 +42,7 @@ const FALAS = roteiro.map((r, i) => {
 });
 const F = Object.fromEntries(FALAS.map((f) => [f.id, f])) as Record<keyof typeof dur, (typeof FALAS)[number]>;
 const T = {
-  gancho: 3.0,
+  gancho: 2.4,
   biaEntra: F.bia_1.inicio - 0.5,
   carolEntra: F.carol_0.inicio - 0.5,
   tempo: F.carol_0.inicio + 0.2,
