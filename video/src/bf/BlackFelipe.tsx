@@ -23,7 +23,7 @@ import dur from "./vozes.json";
 type Quem = "ana" | "bia" | "carol" | "felipe";
 const GAP = 0.3;
 const roteiro: { id: keyof typeof dur; quem: Quem; texto: string; antes?: number }[] = [
-  { id: "ana_1", quem: "ana", texto: "Gente, eu já tentei de tudo pra *emagrecer*… e *não consigo*.", antes: 0.5 },
+  { id: "ana_1", quem: "ana", texto: "Já tentei de tudo pra ter *resultado*! Mas eu treino, treino e *não evoluo*.", antes: 0.5 },
   { id: "bia_1", quem: "bia", texto: "Amiga, experimenta a *consultoria do Felipe*! Começou a Black: 1º mês por *R$ 100*!", antes: 0.4 },
   { id: "carol_1", quem: "carol", texto: "E não é só treino: é uma *comunidade* de gente que *alcança o objetivo*.", antes: 0.6 },
   { id: "bia_2", quem: "bia", texto: "Ele se *preocupa de verdade* com você. É a *melhor consultoria da região*!" },
