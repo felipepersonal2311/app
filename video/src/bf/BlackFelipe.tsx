@@ -23,9 +23,10 @@ import dur from "./vozes.json";
 type Quem = "ana" | "bia" | "carol" | "felipe";
 const GAP = 0.3;
 const roteiro: { id: keyof typeof dur; quem: Quem; texto: string; antes?: number }[] = [
-  { id: "ana_1", quem: "ana", texto: "Já tentei de tudo pra ter *resultado*! Mas eu treino, treino e *não evoluo*.", antes: 0.5 },
+  { id: "ana_1", quem: "ana", texto: "Já tentei de tudo! *Passo horas na academia*, treino, treino… e *não evoluo*.", antes: 0.5 },
   { id: "bia_1", quem: "bia", texto: "Amiga, experimenta a *consultoria do Felipe*! Começou a Black: 1º mês por *R$ 100*!", antes: 0.4 },
-  { id: "carol_1", quem: "carol", texto: "E não é só treino: é uma *comunidade* de gente que *alcança o objetivo*.", antes: 0.6 },
+  { id: "carol_0", quem: "carol", texto: "E sabia que lá o treino *não passa de 40 a 50 minutos*?", antes: 0.6 },
+  { id: "carol_1", quem: "carol", texto: "E não é só treino: é uma *comunidade* de gente que *alcança o objetivo*." },
   { id: "bia_2", quem: "bia", texto: "Ele se *preocupa de verdade* com você. É a *melhor consultoria da região*!" },
   { id: "ana_2", quem: "ana", texto: "E se eu quiser *ficar mais tempo*?" },
   { id: "carol_2", quem: "carol", texto: "No semestral você ganha *1 mês*… e no anual, *2 meses* de bônus!" },
@@ -43,7 +44,8 @@ const F = Object.fromEntries(FALAS.map((f) => [f.id, f])) as Record<keyof typeof
 const T = {
   gancho: 3.0,
   biaEntra: F.bia_1.inicio - 0.5,
-  carolEntra: F.carol_1.inicio - 0.5,
+  carolEntra: F.carol_0.inicio - 0.5,
+  tempo: F.carol_0.inicio + 0.2,
   oferta: F.bia_1.inicio + 3.0,
   comunidade: F.carol_1.inicio + 0.3,
   cuidado: F.bia_2.inicio,
@@ -134,6 +136,31 @@ const Oferta: React.FC<{ dur: number }> = ({ dur }) => {
         <div style={{ fontFamily: theme.fonts.display, fontSize: 210, lineHeight: 0.95, color: VERM, transform: `scale(${1 + Math.sin(frame / 9) * 0.015})` }}>R$ 100</div>
         <div style={{ display: "inline-block", marginTop: 8, background: MAR, color: "#fff", fontFamily: theme.fonts.apoio, fontWeight: 800, fontSize: 36, padding: "10px 26px", borderRadius: 40 }}>
           SÓ 10 VAGAS
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Tempo: React.FC<{ dur: number }> = ({ dur }) => {
+  const { style } = useBloco(dur);
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  // ponteiro gira até "50 min"
+  const ang = interpolate(frame, [6, 6 + fps * 1.2], [0, 300], { easing: theme.ease.out, ...clamp });
+  return (
+    <div style={{ position: "absolute", left: 140, top: 280, width: 800, ...style }}>
+      <div style={{ ...cartao, padding: "34px 40px", display: "flex", alignItems: "center", gap: 40 }}>
+        <svg width={220} height={220} viewBox="0 0 220 220" style={{ flexShrink: 0 }}>
+          <circle cx={110} cy={110} r={96} fill="#fff" stroke={MAR} strokeWidth={12} />
+          <path d={`M 110 110 L 110 26 A 84 84 0 ${ang > 180 ? 1 : 0} 1 ${110 + 84 * Math.sin((ang * Math.PI) / 180)} ${110 - 84 * Math.cos((ang * Math.PI) / 180)} Z`} fill={VERM} opacity={0.85} />
+          <line x1={110} y1={110} x2={110 + 70 * Math.sin((ang * Math.PI) / 180)} y2={110 - 70 * Math.cos((ang * Math.PI) / 180)} stroke={MAR} strokeWidth={10} strokeLinecap="round" />
+          <circle cx={110} cy={110} r={12} fill={MAR} />
+        </svg>
+        <div>
+          <div style={{ fontFamily: theme.fonts.display, fontSize: 130, lineHeight: 0.95, color: VERM }}>40 A 50</div>
+          <div style={{ fontFamily: theme.fonts.display, fontSize: 84, lineHeight: 1, color: MAR }}>MINUTOS</div>
+          <div style={{ fontFamily: theme.fonts.apoio, fontWeight: 800, fontSize: 34, color: MAR, marginTop: 6 }}>por treino</div>
         </div>
       </div>
     </div>
@@ -319,7 +346,8 @@ export const BlackFelipe: React.FC = () => {
         ) : null}
       </div>
 
-      {bloco(T.oferta, F.carol_1.inicio, Oferta)}
+      {bloco(T.oferta, F.carol_0.inicio, Oferta)}
+      {bloco(T.tempo, F.carol_1.inicio, Tempo)}
       {bloco(T.comunidade, F.bia_2.inicio, Comunidade)}
       {bloco(T.cuidado, F.ana_2.fim, Cuidado)}
       {bloco(T.semestral, T.cta, Planos)}
@@ -368,6 +396,7 @@ export const BlackFelipe: React.FC = () => {
           [f(T.biaEntra) - 3, "whoosh", 0.3],
           [f(T.oferta) - 3, "thump", 0.4],
           [f(T.carolEntra) - 3, "whoosh", 0.3],
+          [f(T.tempo) - 2, "pop", 0.3],
           [f(T.comunidade) - 2, "pop", 0.3],
           [f(T.cuidado), "blip", 0.15],
           [f(T.cuidado) + 9, "blip", 0.15],
